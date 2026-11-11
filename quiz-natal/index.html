@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de Natal · Pixel Media</title>
+<meta name="description" content="Descubra em 1 minuto se a sua loja está pronta para vender no Natal. 7 perguntas, nota de 0 a 12 e os 2 pontos que mais pesam.">
+<meta name="theme-color" content="#F8F7F6">
+<meta property="og:title" content="Sua loja está pronta para vender no Natal?">
+<meta property="og:description" content="7 perguntas, 1 minuto. No fim, sua nota e os 2 pontos que mais pesam nas vendas de dezembro.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23C4962A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Newsreader:ital,opsz,wght@1,6..72,500&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO: o que muda sem mexer no resto do código
+   ============================================================ */
+window.QUIZ_CFG = {
+  // Pixel do Meta (conjunto de dados "Pixel Company", conta PIXEL.CO 01)
+  pixelId: "4032135943586542",
+  // WhatsApp que recebe a pessoa no final: 55 + DDD + número, só dígitos
+  whatsapp: "",
+  // URL do app da web do Apps Script (planilha de leads). Vazio = não grava
+  sheetUrl: "",
+  // Google Ads: deixe vazio até criar a conversão "Lead do quiz"
+  googleAds: { id: "", leadLabel: "", contactLabel: "" },
+  // Último dia para fechar a campanha de Natal e estar no ar em 01/12
+  fechaNatal: "2026-11-24",
+  vagasNatal: 8
+};
+</script>
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('set', 'autoConfig', false, window.QUIZ_CFG.pixelId); // sem eventos automáticos de clique: só os do quiz
+fbq('init', window.QUIZ_CFG.pixelId);
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=4032135943586542&ev=PageView&noscript=1"></noscript>
+<!-- Fim do Meta Pixel -->
+
+<style>
+:root {
+  --papel: #F8F7F6;
+  --branco: #FFFFFF;
+  --tinta: #0A0909;
+  --tinta2: #333333;
+  --grafite: #6B6B6B;
+  --linha: #E6E5E3;
+  --ouro: #C4962A;
+  --ouro-escuro: #A07820;
+  --ouro-profundo: #8A6618;
+  --erro: #B3261E;
+  --raio: 28px;
+  --gutter: 16px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--papel); color: var(--tinta);
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px; line-height: 1.5; min-height: 100vh; min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ouro-escuro); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 var(--gutter); }
+header.top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: max(18px, env(safe-area-inset-top)); padding-bottom: 18px; gap: 12px;
+}
+header.top svg { height: 21px; width: auto; display: block; }
+.mono { font-family: "DM Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: 0; color: var(--grafite); font-variant-numeric: tabular-nums; }
+
+/* barra de progresso */
+.progress { height: 3px; background: var(--linha); border-radius: 2px; overflow: hidden; margin-bottom: 28px; }
+.progress i { display: block; height: 100%; width: 0; background: var(--ouro); transition: width .45s cubic-bezier(.2,.7,.2,1); }
+
+.rotulo { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+.rotulo::before { content: ""; width: 22px; height: 2px; background: var(--ouro); flex: none; }
+
+h1, h2 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(34px, 9.4vw, 52px); }
+h2 { font-size: clamp(26px, 7vw, 36px); }
+em.emo {
+  font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 500;
+  font-size: 1.1em; letter-spacing: -0.01em; color: var(--ouro-escuro);
+}
+.lead { color: var(--tinta2); font-size: 18px; margin: 16px 0 0; max-width: 34em; }
+
+/* tela */
+.screen { display: none; padding-bottom: 48px; }
+.screen.on { display: block; animation: entra .5s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* abertura */
+.intro { padding-top: 12px; }
+.fatos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 28px 0; }
+.fato { background: var(--branco); border: 1px solid var(--linha); border-radius: 18px; padding: 14px 12px; }
+.fato b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.fato span { font-size: 13px; color: var(--grafite); line-height: 1.3; display: block; margin-top: 4px; }
+
+/* pedido: faixa ouro, texto tinta */
+.faixa {
+  display: block; width: 100%; border: 0; border-radius: 4px; background: var(--ouro); color: var(--tinta);
+  font-weight: 800; font-size: 18px; letter-spacing: -0.01em; text-align: left; padding: 19px 22px;
+  text-decoration: none; transition: background .2s, transform .15s;
+}
+.faixa:hover { background: #CFA23A; }
+.faixa:active { transform: scale(.99); }
+.faixa[disabled] { background: var(--linha); color: var(--grafite); cursor: default; }
+.nota-pe { font-size: 14px; color: var(--grafite); margin: 14px 0 0; }
+
+/* pergunta */
+.q-num { margin-bottom: 10px; }
+.opcoes { display: grid; gap: 10px; margin-top: 26px; }
+.op {
+  display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 10px; text-align: left;
+  background: var(--branco); border: 1px solid var(--linha); border-radius: 18px; padding: 16px 18px;
+  font-size: 17px; font-weight: 500; line-height: 1.3;
+  transition: border-color .2s, box-shadow .2s, opacity .25s, transform .15s;
+}
+.op:hover { border-color: #CFCDC9; }
+.op:active { transform: scale(.99); }
+.op .k { font-family: "DM Mono", monospace; font-size: 13px; color: var(--grafite); }
+.op[aria-pressed="true"] { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); }
+.op[aria-pressed="true"] .k { color: transparent; position: relative; }
+.op[aria-pressed="true"] .k::after {
+  content: ""; position: absolute; left: 0; top: 50%; width: 12px; height: 12px; margin-top: -6px;
+  background: var(--ouro); border-radius: 2.2px;
+}
+.opcoes.escolhido .op:not([aria-pressed="true"]) { opacity: .55; }
+
+/* cartão de consciência */
+.cartao {
+  margin-top: 16px; background: var(--tinta); color: var(--papel); border-radius: var(--raio);
+  padding: 24px 22px 22px; display: none;
+}
+.cartao.on { display: block; animation: entra .45s cubic-bezier(.2,.7,.2,1) both; }
+.cartao .mono { color: var(--ouro); display: flex; align-items: center; gap: 8px; }
+.cartao .mono::before { content: ""; width: 9px; height: 9px; background: var(--ouro); border-radius: 1.6px; }
+.cartao h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 12px 0 8px; }
+.cartao p { margin: 0; color: #D9D6D2; font-size: 16.5px; }
+.cartao .faixa { margin-top: 20px; }
+
+.voltar { background: none; border: 0; padding: 8px 0; margin-top: 18px; color: var(--grafite); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+
+/* formulário */
+form { margin-top: 26px; display: grid; gap: 14px; }
+label.campo { display: grid; gap: 6px; font-weight: 700; font-size: 15px; }
+label.campo small { font-weight: 400; color: var(--grafite); }
+.in {
+  width: 100%; background: var(--branco); border: 1px solid var(--linha); border-radius: 14px;
+  padding: 15px 16px; font-size: 17px; font-weight: 500; transition: border-color .2s, box-shadow .2s;
+}
+.in:focus { outline: none; border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); }
+.in[aria-invalid="true"] { border-color: var(--erro); box-shadow: inset 0 0 0 1px var(--erro); }
+.erro { color: var(--erro); font-size: 14px; font-weight: 500; min-height: 0; }
+.insta { position: relative; }
+.insta span { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--grafite); font-weight: 500; pointer-events: none; }
+.insta .in { padding-left: 34px; }
+.lgpd { font-size: 13.5px; color: var(--grafite); margin: 2px 0 0; line-height: 1.45; }
+
+/* resultado */
+.placar {
+  background: var(--tinta); color: var(--papel); border-radius: var(--raio); padding: 26px 22px 24px; margin-top: 4px;
+}
+.placar .mono { color: var(--ouro); }
+.placar .num { font-size: clamp(72px, 22vw, 108px); font-weight: 800; letter-spacing: -0.05em; line-height: .95; font-variant-numeric: tabular-nums; margin: 14px 0 4px; }
+.placar .num small { font-size: .36em; color: #9C9893; letter-spacing: -0.02em; font-weight: 700; }
+.placar .barra { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin: 14px 0 20px; }
+.placar .barra i { height: 8px; border-radius: 1.5px; background: #2A2826; }
+.placar .barra i.on { background: var(--ouro); }
+.placar h2 { color: var(--papel); }
+.placar h2 em.emo { color: var(--ouro); }
+.placar p { color: #D9D6D2; margin: 12px 0 0; font-size: 17px; }
+
+.secao { margin-top: 32px; }
+.secao > .mono { display: block; margin-bottom: 12px; }
+.ponto {
+  background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio);
+  padding: 20px 20px 18px; display: grid; grid-template-columns: 34px 1fr; gap: 6px 12px; margin-bottom: 10px;
+}
+.ponto .mono { padding-top: 3px; }
+.ponto b { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.ponto p { grid-column: 2; margin: 0; color: var(--tinta2); font-size: 16px; }
+.final { margin-top: 28px; }
+.final p.sub { color: var(--tinta2); margin: 14px 0 0; }
+
+footer { padding: 28px 0 max(28px, env(safe-area-inset-bottom)); border-top: 1px solid var(--linha); margin-top: 24px; }
+footer p { margin: 0; font-size: 13px; color: var(--grafite); }
+
+@media (min-width: 640px) {
+  :root { --gutter: 24px; }
+  header.top { padding-top: 28px; padding-bottom: 28px; }
+  .cartao, .placar { padding: 30px 30px 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a href="#" aria-label="Pixel Media" id="logo" style="display:block">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -72.5 537.5 73.7" role="img" aria-label="Pixel Media"><g transform="translate(-6.8 0)"><path fill="#0A0909" d="M20.80 0L6.80 0L6.80-70L33.40-70Q41.90-70 47.50-67.10Q53.10-64.20 55.85-59.25Q58.60-54.30 58.60-48L58.60-48Q58.60-42.20 55.95-37.25Q53.30-32.30 47.70-29.20Q42.10-26.10 33.40-26.10L33.40-26.10L20.80-26.10L20.80 0ZM20.80-58.60L20.80-37.40L32.50-37.40Q38.80-37.40 41.55-40.30Q44.30-43.20 44.30-48L44.30-48Q44.30-53 41.55-55.80Q38.80-58.60 32.50-58.60L32.50-58.60L20.80-58.60ZM79.70 0L65.70 0L65.70-50.40L79.70-50.40L79.70 0ZM72.70-56.90L72.70-56.90Q68.90-56.90 66.50-59.15Q64.10-61.40 64.10-64.70L64.10-64.70Q64.10-68.10 66.50-70.30Q68.90-72.50 72.70-72.50L72.70-72.50Q76.50-72.50 78.90-70.30Q81.30-68.10 81.30-64.70L81.30-64.70Q81.30-61.40 78.90-59.15Q76.50-56.90 72.70-56.90ZM100.50 0L85.40 0L103.60-25.20L85.40-50.40L100.50-50.40L112.50-33.50L124.40-50.40L139.40-50.40L121.20-25.20L139.40 0L124.40 0L112.50-17L100.50 0ZM166.50 1.20L166.50 1.20Q158.90 1.20 153.05-2.05Q147.20-5.30 143.90-11.15Q140.60-17 140.60-24.70L140.60-24.70Q140.60-32.50 143.85-38.55Q147.10-44.60 152.95-48.10Q158.80-51.60 166.60-51.60L166.60-51.60Q174.10-51.60 179.75-48.30Q185.40-45 188.55-39.40Q191.70-33.80 191.70-26.50L191.70-26.50Q191.70-25.50 191.65-24.30Q191.60-23.10 191.40-21.70L191.40-21.70L154.50-21.70Q154.70-18.70 155.90-16.40L155.90-16.40Q157.40-13.40 160.10-11.80Q162.80-10.20 166.40-10.20Q170-10.20 172.35-11.70Q174.70-13.20 175.90-15.60L175.90-15.60L190.20-15.60Q188.80-10.90 185.45-7.10Q182.10-3.30 177.30-1.05Q172.50 1.20 166.50 1.20ZM154.70-30.20L154.70-30.20L177.50-30.20Q177.20-34.80 174.15-37.55Q171.10-40.30 166.60-40.30L166.60-40.30Q163.20-40.30 160.40-38.70Q157.60-37.10 156-34L156-34Q155.10-32.30 154.70-30.20ZM213.70 0L199.70 0L199.70-72L213.70-72L213.70 0ZM258.20 0L244.20 0L244.20-70L261-70L282.10-26.90L302.90-70L319.60-70L319.60 0L305.60 0L305.60-46.30L287.50-9.80L276.40-9.80L258.20-46.30L258.20 0ZM354.30 1.20L354.30 1.20Q346.70 1.20 340.85-2.05Q335-5.30 331.70-11.15Q328.40-17 328.40-24.70L328.40-24.70Q328.40-32.50 331.65-38.55Q334.90-44.60 340.75-48.10Q346.60-51.60 354.40-51.60L354.40-51.60Q361.90-51.60 367.55-48.30Q373.20-45 376.35-39.40Q379.50-33.80 379.50-26.50L379.50-26.50Q379.50-25.50 379.45-24.30Q379.40-23.10 379.20-21.70L379.20-21.70L342.30-21.70Q342.50-18.70 343.70-16.40L343.70-16.40Q345.20-13.40 347.90-11.80Q350.60-10.20 354.20-10.20Q357.80-10.20 360.15-11.70Q362.50-13.20 363.70-15.60L363.70-15.60L378-15.60Q376.60-10.90 373.25-7.10Q369.90-3.30 365.10-1.05Q360.30 1.20 354.30 1.20ZM342.50-30.20L342.50-30.20L365.30-30.20Q365-34.80 361.95-37.55Q358.90-40.30 354.40-40.30L354.40-40.30Q351-40.30 348.20-38.70Q345.40-37.10 343.80-34L343.80-34Q342.90-32.30 342.50-30.20ZM409.90 1.20L409.90 1.20Q403 1.20 397.60-2.20Q392.20-5.60 389.05-11.60Q385.90-17.60 385.90-25.10L385.90-25.10Q385.90-32.80 389.05-38.75Q392.20-44.70 397.75-48.15Q403.30-51.60 410.20-51.60L410.20-51.60Q415.60-51.60 419.60-49.65Q423.60-47.70 426.10-44.10L426.10-44.10L426.10-72L440.10-72L440.10 0L427.70 0L426.10-6.80Q424.60-4.70 422.40-2.85Q420.20-1 417.10 0.10Q414 1.20 409.90 1.20ZM413.30-11L413.30-11Q417.20-11 420.20-12.80Q423.20-14.60 424.85-17.80Q426.50-21 426.50-25.20Q426.50-29.40 424.85-32.60Q423.20-35.80 420.20-37.60Q417.20-39.40 413.30-39.40L413.30-39.40Q409.50-39.40 406.50-37.60Q403.50-35.80 401.85-32.60Q400.20-29.40 400.20-25.30L400.20-25.30Q400.20-21.10 401.85-17.85Q403.50-14.60 406.50-12.80Q409.50-11 413.30-11ZM464.50 0L450.50 0L450.50-50.40L464.50-50.40L464.50 0ZM457.50-56.90L457.50-56.90Q453.70-56.90 451.30-59.15Q448.90-61.40 448.90-64.70L448.90-64.70Q448.90-68.10 451.30-70.30Q453.70-72.50 457.50-72.50L457.50-72.50Q461.30-72.50 463.70-70.30Q466.10-68.10 466.10-64.70L466.10-64.70Q466.10-61.40 463.70-59.15Q461.30-56.90 457.50-56.90ZM491.90 1.20L491.90 1.20Q485.70 1.20 481.55-0.85Q477.40-2.90 475.45-6.35Q473.50-9.80 473.50-14L473.50-14Q473.50-18.50 475.80-22Q478.10-25.50 482.90-27.50Q487.70-29.50 494.90-29.50L494.90-29.50L507.30-29.50Q507.30-33.10 506.35-35.45Q505.40-37.80 503.35-39Q501.30-40.20 497.90-40.20L497.90-40.20Q494.20-40.20 491.65-38.60Q489.10-37 488.50-33.80L488.50-33.80L474.90-33.80Q475.50-39.20 478.50-43.15Q481.50-47.10 486.55-49.35Q491.60-51.60 498.00-51.60L498.00-51.60Q505.10-51.60 510.35-49.20Q515.60-46.80 518.45-42.30Q521.30-37.80 521.30-31.20L521.30-31.20L521.30 0L509.50 0L507.90-7.60Q506.90-5.60 505.35-4Q503.80-2.40 501.80-1.25Q499.80-0.10 497.35 0.55Q494.90 1.20 491.90 1.20ZM495.30-9.60L495.30-9.60Q497.80-9.60 499.80-10.45Q501.80-11.30 503.20-12.90Q504.60-14.50 505.50-16.55Q506.40-18.60 506.70-21L506.70-21L506.70-21.10L496.60-21.10Q493.70-21.10 491.85-20.35Q490.00-19.60 489.10-18.25Q488.20-16.90 488.20-15.20L488.20-15.20Q488.20-13.40 489.10-12.10Q490.00-10.80 491.60-10.20Q493.20-9.60 495.30-9.60Z"/><rect x="526.3" y="-18" width="18" height="18" rx="3.24" fill="#C4962A"/></g></svg>
+    </a>
+    <span class="mono" id="passo" aria-live="polite">Quiz de Natal</span>
+  </header>
+  <div class="progress" aria-hidden="true"><i id="barra"></i></div>
+
+  <main id="app">
+    <!-- abertura -->
+    <section class="screen on intro" id="s-intro" aria-labelledby="t-intro">
+      <p class="rotulo mono">Quiz de Natal · 1 minuto</p>
+      <h1 id="t-intro" tabindex="-1">Descubra se a sua loja está pronta para vender no <em class="emo">Natal</em>.</h1>
+      <p class="lead">A cada resposta, você vê o que ela muda nas suas vendas de dezembro. No fim, recebe sua nota e os 2 pontos que mais pesam.</p>
+      <div class="fatos">
+        <div class="fato"><b>7</b><span>perguntas de toque</span></div>
+        <div class="fato"><b>1</b><span>minuto para responder</span></div>
+        <div class="fato"><b>0–12</b><span>sua nota no fim</span></div>
+      </div>
+      <button class="faixa" type="button" id="comecar">Começar o quiz</button>
+      <p class="nota-pe">Sem cadastro para começar. Feito pela Pixel Media, de Macapá.</p>
+    </section>
+
+    <!-- pergunta (reaproveitada) -->
+    <section class="screen" id="s-q" aria-labelledby="t-q">
+      <p class="rotulo mono q-num" id="q-rotulo"></p>
+      <h2 id="t-q" tabindex="-1"></h2>
+      <div class="opcoes" id="opcoes" role="group" aria-labelledby="t-q"></div>
+      <div class="cartao" id="cartao" aria-live="polite">
+        <span class="mono" id="c-rotulo">O que isso significa</span>
+        <h3 id="c-titulo"></h3>
+        <p id="c-texto"></p>
+        <button class="faixa" type="button" id="proxima">Próxima pergunta</button>
+      </div>
+      <button class="voltar" type="button" id="voltar">Voltar</button>
+    </section>
+
+    <!-- dados -->
+    <section class="screen" id="s-form" aria-labelledby="t-form">
+      <p class="rotulo mono">Respostas completas</p>
+      <h2 id="t-form" tabindex="-1">Sua nota está <em class="emo">pronta</em>.</h2>
+      <p class="lead">Diga quem é você para ver o resultado. Eu olho o Instagram da loja antes de te chamar.</p>
+      <form id="form" novalidate autocomplete="on">
+        <label class="campo">Seu nome
+          <input class="in" id="f-nome" name="name" autocomplete="given-name" required maxlength="60" placeholder="Ex.: Joana">
+          <span class="erro" id="e-nome"></span>
+        </label>
+        <label class="campo">Instagram da loja
+          <span class="insta"><span aria-hidden="true">@</span><input class="in" id="f-insta" name="instagram" autocomplete="off" autocapitalize="none" spellcheck="false" required maxlength="80" placeholder="sualoja"></span>
+          <span class="erro" id="e-insta"></span>
+        </label>
+        <label class="campo">WhatsApp <small>com DDD</small>
+          <input class="in" id="f-zap" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" required maxlength="16" placeholder="(96) 99999-9999">
+          <span class="erro" id="e-zap"></span>
+        </label>
+        <p class="lgpd">Ao enviar, você aceita receber o contato da Pixel Media pelo WhatsApp sobre o resultado. Seus dados não são vendidos nem repassados.</p>
+        <button class="faixa" type="submit" id="enviar">Ver meu resultado</button>
+      </form>
+      <button class="voltar" type="button" id="voltar-form">Voltar</button>
+    </section>
+
+    <!-- resultado -->
+    <section class="screen" id="s-res" aria-labelledby="t-res">
+      <div class="placar">
+        <span class="mono" id="r-rotulo">Resultado</span>
+        <div class="num" id="r-num"></div>
+        <div class="barra" id="r-barra" aria-hidden="true"></div>
+        <h2 id="t-res" tabindex="-1"></h2>
+        <p id="r-texto"></p>
+      </div>
+      <div class="secao">
+        <span class="mono" id="r-pontos-rotulo">— Os 2 pontos que mais pesam</span>
+        <div id="r-pontos"></div>
+      </div>
+      <div class="final">
+        <a class="faixa" id="r-zap" href="#" target="_blank" rel="noopener">Receber a oferta de Natal da minha loja</a>
+        <p class="sub" id="r-sub"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer><p>Pixel Media · campanhas de oferta, vídeo, arte e anúncio · Macapá e Santana (AP)</p></footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var CFG = window.QUIZ_CFG;
+
+  /* ---------- conteúdo ---------- */
+  // pts: 2 = pronto, 1 = pela metade, 0 = falta
+  var NICHO = {
+    id: "nicho", titulo: "Qual é o seu negócio?",
+    ops: [
+      { t: "Estética e beleza", c: ["Dezembro enche a agenda.", "Festa de firma, formatura e Réveillon: muita gente quer se arrumar no mesmo mês. Quem aparece primeiro no celular dela marca o horário."] },
+      { t: "Moda e acessórios", c: ["Roupa é presente e é a roupa da virada.", "Dezembro junta as duas compras. O cliente decide onde vai comprar antes de sair de casa, olhando o Instagram."] },
+      { t: "Alimentação", c: ["Em dezembro, o cliente encomenda antes.", "Ceia, confraternização e doce de Natal são decididos com dias de antecedência. Quem anuncia antes entra na lista."] },
+      { t: "Ótica, eletro ou móveis", c: ["Sua loja é a loja do 13º.", "O dinheiro extra de dezembro vira óculos, TV e sofá novos. A 2ª parcela do 13º cai até 20 de dezembro."] },
+      { t: "Outro tipo de negócio", c: ["Em dezembro, todo mundo disputa o mesmo dinheiro.", "O 13º e o presente de Natal. Quem aparece antes, com um motivo para comprar agora, leva."] }
+    ]
+  };
+  var PERGUNTAS = [
+    { id: "oferta", titulo: "A oferta de Natal da sua loja já está definida?",
+      fraco: ["Defina a oferta de Natal", "Produto, condição e prazo. É ela que faz o anúncio vender, não só aparecer."],
+      ops: [
+        { t: "Sim: produto, condição e prazo", p: 2, c: ["Você está na frente.", "Oferta com produto, condição e prazo é o que faz o anúncio vender. Agora é colocar verba atrás dela."] },
+        { t: "Tenho uma ideia", p: 1, c: ["Ideia ainda não é oferta.", "Quem rola o feed decide em segundos. O anúncio precisa dizer o quê, quanto e até quando."] },
+        { t: "Ainda não", p: 0, c: ["É aqui que a maioria trava.", "Sem oferta, o post vira só \"Feliz Natal\" e o cliente compra de quem deu um motivo. A gente sempre começa por ela."] }
+      ] },
+    { id: "anuncio", titulo: "Você anunciou nos últimos 3 meses?",
+      fraco: ["Anuncie, não só impulsione", "Anúncio feito na conta de anúncios escolhe quem vê, testa versões e leva direto para o WhatsApp."],
+      ops: [
+        { t: "Sim, pela conta de anúncios", p: 2, c: ["Você já conhece o caminho.", "Em dezembro muda a oferta e o ritmo: mais verba nos dias em que mais gente está comprando."] },
+        { t: "Só impulsionei post", p: 1, c: ["Impulsionar não é anunciar.", "Impulsionar mostra o post para mais gente. O anúncio escolhe quem vê, testa versões e leva direto para o seu WhatsApp."] },
+        { t: "Não anunciei", p: 0, c: ["Hoje, só te encontra quem já te conhece.", "No Natal, o cliente novo está procurando onde comprar. E ele só vê quem anuncia."] }
+      ] },
+    { id: "video", titulo: "Você tem vídeo e foto para usar no Natal?",
+      fraco: ["Grave vídeos novos para o Natal", "Curtos e na vertical. Uma tarde de gravação na loja rende vários anúncios."],
+      ops: [
+        { t: "Sim, feitos para o Natal", p: 2, c: ["Material novo faz diferença.", "O cliente percebe quando a foto é do ano passado. Tenha versões curtas, na vertical, para o anúncio."] },
+        { t: "Só material antigo", p: 1, c: ["O feed pula o que parece repetido.", "Material antigo serve no perfil. No anúncio, um vídeo novo, curto e na vertical prende mais."] },
+        { t: "Não tenho", p: 0, c: ["Falta a peça que mais prende no Instagram.", "Sem vídeo, o anúncio fica fraco. Uma tarde de gravação na loja já rende vários vídeos."] }
+      ] },
+    { id: "whatsapp", titulo: "Quando o cliente chama no WhatsApp, o que acontece?",
+      fraco: ["Tenha resposta pronta no WhatsApp", "Quem chama a sua loja muitas vezes chamou outras também. Responde primeiro quem vende."],
+      ops: [
+        { t: "Respondo na hora, com mensagem pronta", p: 2, c: ["Isso vale ouro em dezembro.", "Quem chama a sua loja muitas vezes chamou outras também. Responde primeiro quem vende."] },
+        { t: "Respondo quando dá", p: 1, c: ["Em dezembro, \"quando dá\" pode ser tarde.", "O cliente que chamou você também chamou outras lojas. Uma mensagem pronta já segura a conversa."] },
+        { t: "Às vezes fica sem resposta", p: 0, c: ["Esse é o vazamento mais caro.", "Você paga para o cliente chamar e ele vai embora. Antes de anunciar, deixe a resposta pronta."] }
+      ] },
+    { id: "verba", titulo: "Quanto você pode investir em anúncio em dezembro?",
+      fraco: ["Defina a verba antes de começar", "A verba vai direto para o Instagram ou o Google. Com o número definido, ela dura o mês todo."],
+      ops: [
+        { t: "R$ 30 por dia ou mais", p: 2, c: ["Dá para anunciar o mês inteiro.", "Com isso, o anúncio roda todos os dias de dezembro e ainda testa mais de uma versão."] },
+        { t: "Menos de R$ 30 por dia", p: 1, c: ["Dá para começar, concentrando.", "Com pouca verba, o que funciona é uma oferta, um público e os dias de maior movimento."] },
+        { t: "Ainda não pensei", p: 0, c: ["A verba é à parte, e precisa de um número.", "Ela é paga direto ao Instagram ou ao Google. Sem um valor definido, ela acaba nos primeiros dias."] }
+      ] },
+    { id: "data", titulo: "Quando a sua campanha de Natal começa?",
+      fraco: ["Marque a data de início", "O Natal não espera. Com a data marcada, oferta, vídeo e anúncio ficam prontos antes."],
+      ops: [
+        { t: "Já está no ar", p: 2, c: ["Você saiu na frente.", "Agora é acompanhar: o que traz conversa recebe mais verba, o que não traz sai."] },
+        { t: "Dia 1º de dezembro", p: 1, c: ["Boa data. Mas ela começa antes.", "Para estar no ar dia 1º, a oferta, o vídeo e o anúncio precisam estar prontos e aprovados até lá."] },
+        { t: "Ainda não sei", p: 0, c: ["O Natal tem data.", "A 2ª parcela do 13º cai até 20 de dezembro. Cada semana parada é venda que vai para quem já está anunciando."] }
+      ] }
+  ];
+  var TODAS = [NICHO].concat(PERGUNTAS);
+  var TOTAL = TODAS.length;
+  var MAX = PERGUNTAS.length * 2;
+  var LETRAS = ["A", "B", "C", "D", "E"];
+
+  var FAIXAS = [
+    { min: 0, max: 4, nome: "no zero", titulo: 'Seu Natal ainda está no <em class="emo">zero</em>.',
+      texto: "Dá tempo, mas não sobra. A campanha completa resolve tudo de uma vez: oferta, vídeo, arte e anúncio." },
+    { min: 5, max: 8, nome: "pela metade", titulo: 'Seu Natal está pela <em class="emo">metade</em>.',
+      texto: "Você tem peças soltas. Falta juntar oferta, vídeo e anúncio numa campanha só, com data para acabar." },
+    { min: 9, max: 12, nome: "quase pronto", titulo: 'Sua loja está quase <em class="emo">pronta</em>.',
+      texto: "Falta pouco: afinar a oferta e colocar verba atrás do que já funciona." }
+  ];
+
+  /* ---------- estado ---------- */
+  var st = { i: 0, resp: {}, iniciou: false, enviado: false };
+  var $ = function (s) { return document.querySelector(s); };
+
+  /* ---------- origem (UTM) ---------- */
+  var qs = new URLSearchParams(location.search);
+  var ORIGEM = {};
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid", "gclid"].forEach(function (k) {
+    var v = qs.get(k);
+    if (v) ORIGEM[k] = v.slice(0, 200);
+  });
+  try {
+    if (Object.keys(ORIGEM).length) sessionStorage.setItem("pm_origem", JSON.stringify(ORIGEM));
+    else ORIGEM = JSON.parse(sessionStorage.getItem("pm_origem") || "{}");
+  } catch (e) {}
+  var TESTE = qs.get("teste") === "1";
+
+  /* ---------- medição ---------- */
+  function px() { if (window.fbq) { try { fbq.apply(null, arguments); } catch (e) {} } }
+  var gadsOn = !!(CFG.googleAds && CFG.googleAds.id);
+  if (gadsOn) {
+    var g = document.createElement("script");
+    g.async = true; g.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(CFG.googleAds.id);
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag("js", new Date()); gtag("config", CFG.googleAds.id);
+  }
+  function gconv(label, extra) {
+    if (!gadsOn || !label || !window.gtag) return;
+    var o = { send_to: CFG.googleAds.id + "/" + label };
+    for (var k in extra) o[k] = extra[k];
+    gtag("event", "conversion", o);
+  }
+  function uid() {
+    return "q" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  /* ---------- navegação ---------- */
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(function (s) { s.classList.remove("on"); });
+    var el = $(id); el.classList.add("on");
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    var h = el.querySelector("[tabindex='-1']"); if (h) h.focus({ preventScroll: true });
+  }
+  function progresso(n, txt) {
+    $("#barra").style.width = Math.round((n / (TOTAL + 1)) * 100) + "%";
+    $("#passo").textContent = txt;
+  }
+  var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+
+  function renderQ() {
+    var q = TODAS[st.i];
+    $("#q-rotulo").textContent = st.i === 0 ? "Para começar" : "Pergunta " + pad(st.i + 1);
+    $("#t-q").textContent = q.titulo;
+    progresso(st.i, pad(st.i + 1) + " / " + pad(TOTAL));
+    var box = $("#opcoes"); box.innerHTML = ""; box.classList.remove("escolhido");
+    q.ops.forEach(function (op, j) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "op"; b.setAttribute("aria-pressed", "false");
+      b.innerHTML = '<span class="k" aria-hidden="true">' + LETRAS[j] + '</span><span></span>';
+      b.lastChild.textContent = op.t;
+      b.addEventListener("click", function () { escolher(j); });
+      box.appendChild(b);
+    });
+    $("#cartao").classList.remove("on");
+    $("#proxima").textContent = st.i === TOTAL - 1 ? "Ver minha nota" : "Próxima pergunta";
+    $("#voltar").style.display = "block";
+    var prev = st.resp[q.id];
+    if (prev != null) escolher(prev, true);
+  }
+
+  function escolher(j, silencioso) {
+    var q = TODAS[st.i];
+    st.resp[q.id] = j;
+    if (!st.iniciou) { st.iniciou = true; px("trackCustom", "QuizInicio"); }
+    var box = $("#opcoes"); box.classList.add("escolhido");
+    box.querySelectorAll(".op").forEach(function (b, k) { b.setAttribute("aria-pressed", k === j ? "true" : "false"); });
+    var c = q.ops[j].c;
+    $("#c-titulo").textContent = c[0];
+    $("#c-texto").textContent = c[1];
+    var cart = $("#cartao");
+    cart.classList.remove("on"); void cart.offsetWidth; cart.classList.add("on");
+    if (!silencioso) {
+      setTimeout(function () {
+        var r = cart.getBoundingClientRect();
+        if (r.bottom > window.innerHeight) window.scrollBy({ top: r.bottom - window.innerHeight + 24, behavior: "smooth" });
+      }, 60);
+    }
+  }
+
+  function nota() {
+    return PERGUNTAS.reduce(function (s, q) { var j = st.resp[q.id]; return s + (j == null ? 0 : q.ops[j].p); }, 0);
+  }
+  function faixa(n) { return FAIXAS.filter(function (f) { return n >= f.min && n <= f.max; })[0]; }
+
+  $("#comecar").addEventListener("click", function () { st.i = 0; renderQ(); show("#s-q"); });
+  $("#proxima").addEventListener("click", function () {
+    if (st.i < TOTAL - 1) { st.i++; renderQ(); show("#s-q"); }
+    else {
+      progresso(TOTAL, "Quase lá");
+      px("trackCustom", "QuizRespondido", { nota: nota(), nicho: NICHO.ops[st.resp.nicho].t });
+      show("#s-form");
+    }
+  });
+  $("#voltar").addEventListener("click", function () {
+    if (st.i === 0) { progresso(0, "Quiz de Natal"); $("#barra").style.width = "0"; show("#s-intro"); }
+    else { st.i--; renderQ(); show("#s-q"); }
+  });
+  $("#voltar-form").addEventListener("click", function () { st.i = TOTAL - 1; renderQ(); show("#s-q"); });
+  $("#logo").addEventListener("click", function (e) { e.preventDefault(); });
+
+  /* ---------- formulário ---------- */
+  var zap = $("#f-zap");
+  zap.addEventListener("input", function () {
+    var d = zap.value.replace(/\D/g, "");
+    if (d.indexOf("55") === 0 && d.length > 11) d = d.slice(2);
+    d = d.slice(0, 11);
+    var o = d;
+    if (d.length > 2) o = "(" + d.slice(0, 2) + ") " + d.slice(2);
+    if (d.length > 7) o = "(" + d.slice(0, 2) + ") " + d.slice(2, d.length - 4) + "-" + d.slice(d.length - 4);
+    zap.value = o;
+  });
+  function limpaInsta(v) {
+    v = (v || "").trim();
+    var m = v.match(/instagram\.com\/([^/?#\s]+)/i);
+    if (m) v = m[1];
+    return v.replace(/^@+/, "").replace(/\s+/g, "").toLowerCase();
+  }
+  $("#f-insta").addEventListener("blur", function () { this.value = limpaInsta(this.value); });
+
+  function erro(campo, msg) {
+    $("#e-" + campo).textContent = msg || "";
+    $("#f-" + campo).setAttribute("aria-invalid", msg ? "true" : "false");
+    return !msg;
+  }
+
+  $("#form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (st.enviado) return;
+    var nome = $("#f-nome").value.trim().replace(/\s+/g, " ");
+    var insta = limpaInsta($("#f-insta").value);
+    $("#f-insta").value = insta;
+    var dig = zap.value.replace(/\D/g, "");
+    var ok = true;
+    ok = erro("nome", nome.length < 2 ? "Escreva seu nome." : "") && ok;
+    ok = erro("insta", !/^[a-z0-9._]{1,30}$/.test(insta) ? "Escreva o @ da loja, sem espaço." : "") && ok;
+    ok = erro("zap", !(dig.length === 10 || dig.length === 11) ? "Escreva o WhatsApp com DDD, só números." : "") && ok;
+    if (!ok) { var inv = document.querySelector('[aria-invalid="true"]'); if (inv) inv.focus(); return; }
+
+    st.enviado = true;
+    var btn = $("#enviar"); btn.disabled = true; btn.textContent = "Calculando…";
+    var n = nota(), f = faixa(n), nicho = NICHO.ops[st.resp.nicho].t, eid = uid();
+    var dados = {
+      id: eid, teste: TESTE, nome: nome, instagram: "@" + insta, whatsapp: "55" + dig,
+      nicho: nicho, nota: n, faixa: f.nome,
+      respostas: PERGUNTAS.map(function (q) { var j = st.resp[q.id]; return { pergunta: q.id, resposta: q.ops[j].t, pontos: q.ops[j].p }; }),
+      origem: ORIGEM, pagina: location.href.split("#")[0], quando: new Date().toISOString(),
+      navegador: navigator.userAgent.slice(0, 180)
+    };
+
+    // 1) planilha
+    if (CFG.sheetUrl) {
+      try {
+        fetch(CFG.sheetUrl, { method: "POST", mode: "no-cors", keepalive: true,
+          headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dados) });
+      } catch (err) {}
+    }
+    // 2) evento de lead
+    px("track", "Lead", { content_name: "Quiz de Natal", content_category: nicho, nota: n, faixa: f.nome }, { eventID: eid });
+    gconv(CFG.googleAds.leadLabel, { transaction_id: eid });
+
+    setTimeout(function () { resultado(dados, f); }, 450);
+  });
+
+  /* ---------- resultado ---------- */
+  function resultado(d, f) {
+    progresso(TOTAL + 1, "Resultado");
+    $("#r-rotulo").textContent = d.nome.split(" ")[0] + ", esta é a sua nota";
+    $("#r-num").innerHTML = d.nota + '<small> / ' + MAX + '</small>';
+    var bar = ""; for (var k = 0; k < MAX; k++) bar += '<i class="' + (k < d.nota ? "on" : "") + '"></i>';
+    $("#r-barra").innerHTML = bar;
+    $("#t-res").innerHTML = f.titulo;
+    $("#r-texto").textContent = f.texto;
+
+    var fracos = PERGUNTAS.map(function (q, ix) { return { q: q, p: q.ops[st.resp[q.id]].p, ix: ix }; })
+      .filter(function (x) { return x.p < 2; })
+      .sort(function (a, b) { return a.p - b.p || a.ix - b.ix; })
+      .slice(0, 2);
+    var box = $("#r-pontos"); box.innerHTML = "";
+    if (!fracos.length) {
+      $("#r-pontos-rotulo").textContent = "— Nada travando";
+      fracos = [{ q: { fraco: ["Coloque verba atrás do que funciona", "Sua base está pronta. O próximo passo é medir o que traz conversa e reforçar isso em dezembro."] } }];
+    } else {
+      $("#r-pontos-rotulo").textContent = fracos.length === 1 ? "— O ponto que mais pesa" : "— Os 2 pontos que mais pesam";
+    }
+    fracos.forEach(function (x, k) {
+      var el = document.createElement("div"); el.className = "ponto";
+      el.innerHTML = '<span class="mono">' + pad(k + 1) + '</span><b></b><p></p>';
+      el.querySelector("b").textContent = x.q.fraco[0];
+      el.querySelector("p").textContent = x.q.fraco[1];
+      box.appendChild(el);
+    });
+
+    // texto de prazo, conforme a data de hoje
+    var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    var limite = new Date(CFG.fechaNatal + "T00:00:00");
+    var fimNov = new Date(limite.getFullYear(), 10, 30);
+    var prazo;
+    if (hoje <= limite) prazo = "São " + CFG.vagasNatal + " vagas para campanhas de Natal. Quem fecha até 24/11 está no ar no dia 1º de dezembro.";
+    else if (hoje <= fimNov) prazo = "Ainda dá para entrar: quem fecha agora fica no ar em até 7 dias.";
+    else prazo = "Para quem decidiu tarde, a Campanha Express fica no ar em poucos dias.";
+    $("#r-sub").textContent = "Na conversa, eu te mostro em 20 minutos a oferta que eu faria para a sua loja. É o Raio-X, sem custo. " + prazo;
+
+    var msg = "Oi! Fiz o quiz de Natal da Pixel Media.\n" +
+      "Sou " + d.nome + ", da " + d.instagram + " (" + d.nicho + ").\n" +
+      "Minha nota foi " + d.nota + "/" + MAX + ": " + f.nome + ".\n" +
+      "Quero receber a oferta de Natal da minha loja.";
+    var a = $("#r-zap");
+    if (CFG.whatsapp) a.href = "https://wa.me/" + CFG.whatsapp + "?text=" + encodeURIComponent(msg);
+    else { a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+    a.addEventListener("click", function () {
+      px("track", "Contact", { content_name: "Quiz de Natal" });
+      gconv(CFG.googleAds.contactLabel, {});
+    }, { once: true });
+
+    show("#s-res");
+  }
+})();
+</script>
+</body>
+</html>
