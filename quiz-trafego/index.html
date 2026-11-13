@@ -414,6 +414,10 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
           <input class="in" id="f-nome" name="name" autocomplete="given-name" required maxlength="60" placeholder="Ex.: Joana">
           <span class="erro" id="e-nome"></span>
         </label>
+        <label class="campo">Seu melhor e-mail
+          <input class="in" id="f-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" required maxlength="120" placeholder="voce@email.com">
+          <span class="erro" id="e-email"></span>
+        </label>
         <label class="campo">Instagram do negócio
           <span class="insta"><span aria-hidden="true">@</span><input class="in" id="f-insta" name="instagram" autocomplete="off" autocapitalize="none" spellcheck="false" required maxlength="80" placeholder="seunegocio"></span>
           <span class="erro" id="e-insta"></span>
@@ -422,7 +426,7 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
           <input class="in" id="f-zap" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" required maxlength="16" placeholder="(11) 99999-9999">
           <span class="erro" id="e-zap"></span>
         </label>
-        <p class="lgpd">Ao enviar, você aceita receber o contato da Pixel Media pelo WhatsApp sobre o resultado. Seus dados não são vendidos nem repassados.</p>
+        <p class="lgpd">Ao enviar, você aceita receber o resultado e o contato da Pixel Media por WhatsApp, ligação e e-mail. Você pode pedir para sair quando quiser. Seus dados não são vendidos nem repassados.</p>
         <button class="faixa" type="submit" id="enviar">Liberar meu plano</button>
       </form>
     </div>
@@ -905,11 +909,13 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     e.preventDefault();
     if (st.enviado) return;
     var nome = $("#f-nome").value.trim().replace(/\s+/g, " ");
+    var email = $("#f-email").value.trim().toLowerCase();
     var insta = limpaInsta($("#f-insta").value);
     $("#f-insta").value = insta;
     var dig = zap.value.replace(/\D/g, "");
     var ok = true;
     ok = erro("nome", nome.length < 2 ? "Escreva seu nome." : "") && ok;
+    ok = erro("email", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? "Escreva um e-mail válido, como voce@email.com." : "") && ok;
     ok = erro("insta", !/^[a-z0-9._]{1,30}$/.test(insta) ? "Escreva o @ do negócio, sem espaço." : "") && ok;
     ok = erro("zap", !(dig.length === 10 || dig.length === 11) ? "Escreva o WhatsApp com DDD, só números." : "") && ok;
     if (!ok) { var inv = document.querySelector('[aria-invalid="true"]'); if (inv) inv.focus(); return; }
@@ -918,7 +924,7 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     var btn = $("#enviar"); btn.disabled = true; btn.textContent = "Montando seu plano…";
     var n = nota(), f = faixa(n), nicho = NICHO.ops[st.resp.nicho].t, eid = uid();
     var dados = {
-      id: eid, quiz: "trafego", teste: TESTE, nome: nome, instagram: "@" + insta, whatsapp: "55" + dig,
+      id: eid, quiz: "trafego", teste: TESTE, nome: nome, email: email, instagram: "@" + insta, whatsapp: "55" + dig,
       nicho: nicho, nota: n, faixa: f.nome,
       respostas: ORDEM.slice(1).map(function (q) { var op = q.ops[st.resp[q.id]]; return { pergunta: q.id, resposta: op.t, pontos: op.p == null ? null : op.p }; }),
       origem: ORIGEM, pagina: location.href.split("#")[0], quando: new Date().toISOString(),
