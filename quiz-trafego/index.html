@@ -276,7 +276,16 @@ label.campo small { font-weight: 400; color: var(--grafite); }
 .etapa[data-aberta="true"] .corpo { grid-template-rows: 1fr; }
 .etapa[data-aberta="true"] .corpo > div { padding-bottom: 18px; }
 .etapa .hoje { margin: 0 0 4px; color: var(--ouro-profundo); }
-.etapa .acao { margin: 0; color: var(--tinta2); font-size: 16px; }
+.etapa .acao { margin: 0; color: var(--tinta2); font-size: 16px; line-height: 1.45; }
+.etapa .bloco + .bloco { margin-top: 14px; }
+.etapa .bloco.px { background: var(--papel); border-radius: 14px; padding: 12px 14px; margin-left: -14px; }
+.entra { margin-top: 26px; background: var(--branco); border: 1px solid var(--linha); border-radius: 20px; padding: 20px 20px 22px; }
+.entra .rotulo { margin-bottom: 10px; }
+.entra .ponte { margin: 0; color: var(--tinta); font-size: 17px; line-height: 1.45; }
+.entra ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+.entra li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; align-items: baseline; color: var(--tinta2); font-size: 16px; line-height: 1.45; }
+.entra li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--ouro); transform: translateY(1px); }
+.entra li b { color: var(--tinta); font-weight: 800; }
 .bons-rot { margin-top: 26px; }
 .final { margin-top: 24px; }
 .convite .mono { color: var(--ouro); margin: 0; }
@@ -454,11 +463,21 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
         <p class="r-texto" id="r-texto"></p>
       </div>
       <div class="secao">
-        <p class="rotulo mono">O que fazer, na ordem em que eu faria</p>
+        <p class="rotulo mono">Seu diagnóstico, na ordem em que eu resolveria</p>
         <div class="plano" id="r-plano"></div>
         <div id="r-bons" hidden>
           <p class="rotulo mono bons-rot">O que já está bom</p>
           <div class="plano" id="r-bons-lista"></div>
+        </div>
+        <div class="entra" id="r-entra">
+          <p class="rotulo mono">Como a Pixel entra no seu negócio</p>
+          <p class="ponte" id="r-ponte"></p>
+          <ul>
+            <li><span><b>Você delega os anúncios.</b> A gente monta, roda e ajusta. Você cuida do negócio e atende quem chega.</span></li>
+            <li><span><b>A oferta, montada com você.</b> O que anunciar, com que condição e por quê.</span></li>
+            <li><span><b>Os vídeos, com roteiro.</b> A gente diz o que gravar e mostra quais trazem mais conversa.</span></li>
+            <li><span><b>Relatório todo mês, em linguagem simples.</b> Quanto investiu, quantas conversas vieram e o que vamos mudar.</span></li>
+          </ul>
         </div>
         <div class="final painel convite" id="r-final">
           <p class="mono">Próximo passo</p>
@@ -577,6 +596,7 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     amigo: svg(pes(21, 38, 1, T) + pes(43, 38, 1, T) + '<path d="M32 15c-2.2-3.8-7.6-2.7-7.6 1.3 0 3.6 7.6 7.9 7.6 7.9s7.6-4.3 7.6-7.9c0-4-5.4-5.1-7.6-1.3z" fill="' + O + '"/>'),
     freela: svg('<rect x="12" y="14" width="40" height="27" rx="3.5" fill="' + T + '"/><rect x="16" y="18" width="32" height="19" rx="1.5" fill="' + P + '"/><rect x="20" y="22" width="14" height="4" rx="2" fill="' + O + '"/><rect x="20" y="29" width="22" height="3" rx="1.5" fill="' + G + '"/><path d="M5 44h54l-4 7H9z" fill="' + T + '"/>'),
     agencia: svg('<rect x="12" y="8" width="40" height="50" rx="3" fill="' + T + '"/>' + [16, 27, 38].map(function (y) { return [18, 29, 40].map(function (x) { return '<rect x="' + x + '" y="' + y + '" width="6" height="6" rx="1.2" fill="' + (x === 40 && y === 16 ? O : P) + '"/>'; }).join(""); }).join("") + '<rect x="27" y="47" width="10" height="11" rx="1.5" fill="' + O + '"/>'),
+    produtora: svg('<circle cx="20" cy="17" r="8" fill="' + T + '"/><circle cx="38" cy="17" r="8" fill="' + T + '"/><circle cx="20" cy="17" r="3" fill="' + O + '"/><circle cx="38" cy="17" r="3" fill="' + O + '"/><rect x="6" y="27" width="40" height="27" rx="5" fill="' + T + '"/><path d="M46 35l12-7v25l-12-7z" fill="' + O + '"/><circle cx="14" cy="34" r="2.6" fill="' + O + '"/>'),
     ninguem: svg(pes(32, 34, 1.4, G, true)),
     // verba
     m0: svg('<circle cx="32" cy="32" r="16" fill="none" stroke="' + G + '" stroke-width="3" stroke-dasharray="5 4"/>' + txt(32, 39, 19, G, "0")),
@@ -585,6 +605,10 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
 
   /* ---------- conteúdo ---------- */
   // pts: 2 = acelera, 1 = segura, 0 = trava. Perguntas sem "p" não entram na nota (qualificam o lead).
+  // c = cartão que aparece ao escolher (o que aquilo significa).
+  // No plano, cada ponto fraco vira um cartão em 3 partes:
+  //   d (por opção) = o que está acontecendo · cam = o caminho que resolve · pixel = como a Pixel resolve com a pessoa.
+  // forte = [título, texto] para o que já está bom. Nada de "faça isto": o plano mostra o problema, o caminho e quem faz.
   var NICHO = {
     id: "nicho", titulo: "Qual é o seu negócio?",
     ops: [
@@ -600,91 +624,149 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     id: "dor", titulo: "O que mais te atrapalha hoje?", etapa: "Seu maior problema",
     ops: [
       { t: "Pouca gente me chama", i: "silencio", liga: "descoberta",
-        c: ["Esse é o problema mais comum, e o que mais rápido se resolve.", "Quase sempre não falta cliente: falta ele te ver. É o primeiro ponto do seu plano."],
-        a: ["Apareça para quem ainda não te conhece", "Escolha o produto que mais sai e grave um vídeo de 20 segundos com ele na mão, dizendo o preço e a condição. Esse vídeo vira o seu primeiro anúncio."] },
+        c: ["Esse é o problema mais comum, e um dos que mais rápido se resolvem.", "Quase sempre não falta cliente: falta ele te ver. É por aqui que o seu plano começa."],
+        prob: "Pouca gente chega até você",
+        d: "Quase sempre não falta cliente: falta ele te ver. Quem precisa do que você vende não sabe que você existe, ou te viu uma vez e esqueceu.",
+        cam: "Aparecer todo dia para quem tem perfil de comprar, com um produto e uma condição clara. E aparecer de novo para quem já te viu e ainda não chamou.",
+        pixel: "A gente monta a campanha com você: escolhe o produto que mais atrai cliente, ajuda a montar a oferta, define quem vai ver e roda os anúncios. Você só atende as conversas que chegam e recebe o relatório todo mês." },
       { t: "Perguntam o preço e somem", i: "precoSome", liga: "conversao",
-        c: ["Isso tem conserto, e rápido.", "Quem some depois do preço quase sempre não viu motivo para comprar agora. A primeira resposta no WhatsApp muda isso."],
-        a: ["Responda o preço com um motivo para fechar", "Monte uma resposta pronta com preço, forma de pagamento, uma foto do produto e um prazo (\"condição até sábado\"). Termine perguntando: \"Separo um para você?\""] },
+        c: ["Isso tem conserto.", "Quem some depois do preço quase sempre não viu motivo para comprar agora. Oferta clara e uma boa primeira resposta mudam esse jogo."],
+        prob: "O cliente pergunta o preço e some",
+        d: "Quem some depois do preço quase sempre recebeu só um número seco e não viu motivo para comprar agora. Às vezes, também, o anúncio está trazendo curioso, não comprador.",
+        cam: "Uma oferta com condição e prazo, e uma primeira resposta que já conduz para a venda: preço, forma de pagamento, foto real e um motivo para fechar agora. Junto, anúncios que filtram o curioso antes de ele chamar.",
+        pixel: "A gente revisa a sua oferta com você, escreve junto a resposta para quem pergunta preço e ajusta o anúncio para trazer mais gente com perfil de comprar. E acompanha de perto o que mudou nas conversas." },
       { t: "Não tenho tempo para postar", i: "semTempo", liga: "conteudo",
         c: ["Postar todo dia não é obrigação.", "Um anúncio bem feito trabalha por semanas sem você postar nada novo. Poucos vídeos bons valem mais que post todo dia."],
-        a: ["Grave uma vez e use o mês todo", "Separe 30 minutos e grave 3 vídeos curtos na vertical: o produto na mão, o produto em uso e você falando a condição. Poste um por semana."] },
+        prob: "Falta tempo para o Instagram",
+        d: "Você cuida do negócio e o Instagram fica para depois. Sem anúncio rodando, cada semana sem post é uma semana em que gente nova não te vê.",
+        cam: "Separar o anúncio da rotina de postar. Poucos vídeos bons, gravados de uma vez, viram anúncios que trabalham por semanas, mesmo nos dias em que você não posta nada.",
+        pixel: "A gente cuida dos anúncios do começo ao fim e te diz exatamente o que gravar: roteiro, ordem e duração de cada vídeo. Você grava numa tarde e a gente faz esse material render o mês." },
       { t: "Não sei se anúncio dá retorno", i: "duvida", liga: "",
-        c: ["Sem número, todo anúncio parece caro.", "Dá para saber o retorno com uma pergunta simples para cada pessoa que chama."],
-        a: ["Descubra de onde vem cada venda", "Pergunte a cada pessoa que chamar \"Como você conheceu a gente?\" e anote numa folha: de onde veio, se comprou e quanto gastou."] },
+        c: ["Sem número, todo anúncio parece caro.", "Dá para saber o retorno, sim: quanto foi investido, quantas pessoas chamaram e quantas compraram. Com isso na mão, a decisão fica fácil."],
+        prob: "Você não sabe se o anúncio dá retorno",
+        d: "Sem número, todo anúncio parece caro e a decisão vira achismo. Você corta quando o mês aperta e volta quando sobra, e nada roda tempo suficiente para dar resultado.",
+        cam: "Medir de ponta a ponta: quanto foi investido, quantas pessoas chamaram, quantas compraram e quanto custou cada uma. Com esse número, dá para decidir com calma o que manter e o que cortar.",
+        pixel: "Todo mês você recebe um relatório em linguagem simples: quanto investiu, quantas conversas vieram, quanto custou cada uma e o que vamos mudar. A gente também te ajuda a anotar as vendas para fechar a conta." },
       { t: "O concorrente cobra menos", i: "maisBarato", liga: "",
         c: ["Preço não é a única coisa que vende.", "Quem compra pelo celular decide por confiança: foto real, resposta rápida e prova de que você entrega."],
-        a: ["Venda confiança, não só preço", "Peça a 3 clientes satisfeitos um vídeo curto ou um print de elogio, com autorização, e deixe nos destaques do seu Instagram."] },
+        prob: "O concorrente cobra menos",
+        d: "Quando o cliente só vê preço, ele compara só preço, e você perde para quem cobra menos, mesmo entregando mais.",
+        cam: "Mostrar o que o preço não mostra: entrega, garantia, atendimento e prova de quem já comprou. Uma oferta com condição e bônus faz o cliente comparar o que leva por aquele preço.",
+        pixel: "A gente monta a oferta com você para não precisar baixar o preço, orienta os vídeos que mostram por que comprar de você e coloca isso na frente de quem valoriza o que você entrega." },
       { t: "Falta gente para atender", i: "lotado", liga: "resposta",
         c: ["Problema bom, mas que custa venda.", "Cada cliente que espera demais compra de outro. Organizar o atendimento sai mais barato que contratar."],
-        a: ["Deixe o WhatsApp trabalhar por você", "No WhatsApp Business, ative a mensagem de saudação e crie respostas rápidas para as 3 perguntas que mais aparecem: preço, entrega e horário."] }
+        prob: "Falta gente para atender",
+        d: "É um problema bom, mas custa venda. Cada cliente que espera demais compra de outro, e o anúncio que trouxe essa pessoa foi pago à toa.",
+        cam: "Atendimento organizado antes de mais anúncio: mensagem automática que segura o cliente, respostas prontas para as perguntas que mais aparecem e anúncios rodando nos horários em que alguém pode responder.",
+        pixel: "A gente monta com você o roteiro de atendimento do WhatsApp e regula os anúncios para o volume que a sua equipe dá conta. Mais conversa só quando der para atender bem." }
     ]
   };
   var PONTUADAS = [
     { id: "descoberta", titulo: "Como as pessoas descobrem o seu negócio hoje?", etapa: "Como te encontram",
-      fraco: ["Apareça para quem ainda não te conhece", "Escolha o produto que mais sai, grave 20 segundos com ele na mão dizendo o preço e anuncie esse vídeo com R$ 10 por dia durante uma semana."],
-      forte: ["Mantenha o anúncio rodando", "Troque o vídeo do anúncio a cada 2 ou 3 semanas, antes de o público cansar de ver o mesmo."],
+      prob: "Gente nova quase não te encontra",
+      cam: "Anúncio contínuo, com um produto e uma condição clara, mostrado para quem tem perfil de comprar. Ele roda todo dia, aprende quem responde e traz conversa nova toda semana, sem depender de indicação.",
+      pixel: "A gente escolhe com você o que anunciar, monta as campanhas, define quem vai ver e acompanha de perto. O que não traz conversa sai, e o que traz recebe mais verba. Você só atende quem chama.",
+      forte: ["Você já aparece para gente nova", "O próximo ganho está em testar vídeos e públicos novos e em mostrar o anúncio de novo para quem já te viu e não chamou. A gente faz esses testes todo mês e coloca a verba no que traz cliente."],
       ops: [
-        { t: "Indicação de cliente", i: "indicacao", p: 0, c: ["Indicação é ótima, mas não dá para controlar.", "Ela chega quando quer. O anúncio traz gente nova toda semana, inclusive quem não conhece ninguém que já comprou de você."] },
-        { t: "Passam na frente", i: "loja", p: 0, c: ["Sua vitrine só trabalha no horário da loja.", "No celular, a vitrine fica aberta o dia inteiro e aparece para quem nem passa na sua rua."] },
-        { t: "Posts no Instagram", i: "post", p: 1, c: ["Bom começo, mas o post só chega em quem já te segue.", "Para chegar em gente nova, ele precisa de um empurrão pago e bem direcionado."] },
-        { t: "Impulsiono às vezes", i: "impulso", p: 1, c: ["Você já paga para aparecer. Dá para pagar melhor.", "Impulsionar de vez em quando mostra o post, mas não escolhe quem tem chance de comprar. Anúncio contínuo aprende quem é o seu cliente."] },
+        { t: "Indicação de cliente", i: "indicacao", p: 0, c: ["Indicação é ótima, mas não dá para controlar.", "Ela chega quando quer. O anúncio traz gente nova toda semana, inclusive quem não conhece ninguém que já comprou de você."],
+          d: "Hoje você depende de quem já te conhece. Indicação é ótima, mas vem quando quer: tem mês cheio e mês vazio, e não dá para abrir a torneira quando precisa." },
+        { t: "Passam na frente", i: "loja", p: 0, c: ["Sua vitrine só trabalha no horário da loja.", "No celular, a vitrine fica aberta o dia inteiro e aparece para quem nem passa na sua rua."],
+          d: "Sua vitrine só trabalha para quem passa na rua, no horário da loja. Quem está em casa, procurando o que você vende, não fica sabendo que você existe." },
+        { t: "Posts no Instagram", i: "post", p: 1, c: ["Bom começo, mas o post só chega em quem já te segue.", "Para chegar em gente nova, ele precisa de um empurrão pago e bem direcionado."],
+          d: "O post chega quase só em quem já te segue. Você trabalha para postar, mas gente nova raramente vê." },
+        { t: "Impulsiono às vezes", i: "impulso", p: 1, c: ["Você já paga para aparecer. Dá para pagar melhor.", "Impulsionar de vez em quando mostra o post, mas não escolhe quem tem chance de comprar. Anúncio contínuo aprende quem é o seu cliente."],
+          d: "Impulsionar mostra o post para mais gente, mas não escolhe quem tem chance de comprar, e para quando a verba acaba. A cada vez, o anúncio recomeça do zero." },
         { t: "Anúncio toda semana", i: "alvo", p: 2, c: ["Você já está no jogo certo.", "Agora a pergunta é outra: das pessoas que chegam, quantas compram? As próximas perguntas medem isso."] },
-        { t: "Me acham no Google", i: "lupa", p: 2, c: ["Quem te acha no Google já quer comprar.", "É o cliente mais quente que existe. Garanta que o seu perfil no Google tem fotos, horário e WhatsApp certos."] }
+        { t: "Me acham no Google", i: "lupa", p: 2, c: ["Quem te acha no Google já quer comprar.", "É o cliente mais quente que existe. Um perfil no Google com fotos, horário e WhatsApp certos faz esse cliente chamar você, e não o vizinho."] }
       ] },
     { id: "resposta", titulo: "Quando alguém chama no WhatsApp, em quanto tempo responde?", etapa: "Tempo de resposta",
-      fraco: ["Responda em minutos, mesmo longe do celular", "No WhatsApp Business, ative a mensagem de saudação e crie respostas rápidas para preço, entrega e horário. Leva 15 minutos."],
-      forte: ["Mantenha a resposta rápida no pico", "Deixe alguém de olho no WhatsApp nos horários em que mais chega mensagem, principalmente à noite e no fim de semana."],
+      prob: "O cliente esfria esperando resposta",
+      cam: "Um WhatsApp organizado: mensagem automática que segura o cliente na hora, respostas prontas para preço, entrega e horário, e uma rotina para ninguém ficar sem retorno.",
+      pixel: "A gente monta com você o roteiro de atendimento: a mensagem de boas-vindas, as respostas para as perguntas que mais aparecem e o que dizer para quem sumiu. E programa os anúncios para rodar mais nos horários em que você consegue responder.",
+      forte: ["Você responde rápido, e isso vende", "Com o atendimento afiado, cada conversa a mais tende a virar venda. É a hora de trazer mais gente, e a gente aumenta o alcance sem você perder esse ritmo."],
       ops: [
         { t: "Na hora", i: "rapido", p: 2, c: ["Isso vende mais do que muito anúncio.", "Quem pergunta preço costuma chamar mais de um lugar. Responder primeiro já é meio caminho."] },
-        { t: "Em até 1 hora", i: "hora", p: 1, c: ["Bom, mas dá para ganhar mais vendas aqui.", "Em uma hora, o cliente já recebeu resposta de outro lugar. Uma mensagem automática segura a conversa até você chegar."] },
-        { t: "No mesmo dia", i: "sol", p: 1, c: ["Em algumas horas, o cliente esfria.", "Ele chamou você e mais uns concorrentes. Quem responde primeiro costuma levar."] },
-        { t: "No dia seguinte", i: "lua", p: 0, c: ["No dia seguinte, ele já comprou.", "Quem chama quer resolver logo. Uma resposta automática à noite já avisa que você viu e quando vai responder."] },
-        { t: "Depende do dia", i: "varia", p: 0, c: ["O cliente não sabe qual é o dia bom.", "Ele só sabe que esperou. Mensagem pronta e um horário fixo para responder acabam com o \"depende\"."] },
-        { t: "Às vezes fica sem", i: "vacuo", p: 0, c: ["Você paga e o cliente vai embora.", "Antes de anunciar mais, feche esse buraco. Senão, mais anúncio só traz mais conversa perdida."] }
+        { t: "Em até 1 hora", i: "hora", p: 1, c: ["Bom, mas dá para ganhar mais vendas aqui.", "Em uma hora, o cliente já recebeu resposta de outro lugar. Uma mensagem automática segura a conversa até você chegar."],
+          d: "Em uma hora, quem pediu preço já recebeu resposta de outro lugar. Parte das vendas se perde antes de você ver a mensagem." },
+        { t: "No mesmo dia", i: "sol", p: 1, c: ["Em algumas horas, o cliente esfria.", "Ele chamou você e mais uns concorrentes. Quem responde primeiro costuma levar."],
+          d: "Em algumas horas, o cliente que estava decidido já esfriou ou fechou com quem respondeu antes." },
+        { t: "No dia seguinte", i: "lua", p: 0, c: ["No dia seguinte, ele já comprou.", "Quem chama quer resolver logo. Uma resposta automática à noite já avisa que você viu e quando vai responder."],
+          d: "Quem chama quer resolver hoje. No dia seguinte, quase sempre já comprou em outro lugar, e o anúncio que trouxe essa pessoa foi pago à toa." },
+        { t: "Depende do dia", i: "varia", p: 0, c: ["O cliente não sabe qual é o dia bom.", "Ele só sabe que esperou. Mensagem pronta e um horário fixo para responder acabam com o \"depende\"."],
+          d: "Sem rotina de resposta, parte das conversas cai no dia ruim. O cliente não sabe que você estava ocupado: ele só sabe que esperou." },
+        { t: "Às vezes fica sem", i: "vacuo", p: 0, c: ["Você paga e o cliente vai embora.", "Antes de anunciar mais, esse buraco precisa fechar. Senão, mais anúncio só traz mais conversa perdida."],
+          d: "Tem cliente indo embora sem resposta nenhuma. Enquanto esse buraco existir, mais anúncio só traz mais conversa perdida." }
       ] },
     { id: "conversao", titulo: "De cada 10 pessoas que te chamam, quantas compram?", etapa: "Quem chama e compra",
-      fraco: ["Transforme mais conversas em venda", "Na primeira resposta, mande preço, forma de pagamento, uma foto do produto e um prazo para a condição. Termine com uma pergunta: \"Separo um para você?\""],
-      forte: ["Traga mais gente do mesmo perfil", "Seu atendimento já fecha. Coloque o anúncio para falar com quem se parece com quem já compra de você."],
+      prob: "Muita conversa, pouca venda",
+      cam: "O caminho junta duas frentes. Anúncio que traz gente com perfil de comprar, e uma oferta com preço, condição e prazo que dê motivo para fechar agora. E contar: quantos chamaram, quantos compraram e de onde veio cada um.",
+      pixel: "A gente desenha a oferta com você, ajusta o anúncio para atrair quem compra e acompanha quantas conversas viraram venda. Todo mês você recebe o relatório com quanto custou cada conversa e o que vamos mudar.",
+      forte: ["Seu atendimento fecha bem", "Com uma taxa assim, o que falta é volume. A gente traz mais gente parecida com quem já compra de você e acompanha para a qualidade não cair."],
       ops: [
         { t: "7 ou mais", i: "g7", p: 2, c: ["Seu atendimento é forte.", "Com uma taxa assim, cada pessoa a mais que chega vira venda. Vale trazer mais gente."] },
-        { t: "De 4 a 6", i: "g5", p: 2, c: ["Bom resultado.", "Você converte bem. O próximo passo é trazer mais gente do mesmo perfil."] },
-        { t: "2 ou 3", i: "g3", p: 1, c: ["Dá para dobrar isso.", "Quase sempre a perda está na primeira resposta: falta preço, foto ou um motivo para fechar agora."] },
-        { t: "Só 1", i: "g1", p: 0, c: ["Muita conversa, pouca venda.", "Ou está chegando gente fora do perfil, ou a conversa trava no preço. Os dois têm conserto."] },
-        { t: "Quase nenhuma", i: "g0", p: 0, c: ["Aqui está o maior vazamento.", "Você paga para o cliente chamar e ele não compra. Antes de trazer mais gente, a conversa precisa mudar."] },
-        { t: "Não faço ideia", i: "gq", p: 0, c: ["Sem esse número, você anuncia no escuro.", "Contar é simples: anote durante uma semana quantas pessoas chamaram e quantas compraram."] }
+        { t: "De 4 a 6", i: "g5", p: 2, c: ["Bom resultado.", "Você fecha bem. O próximo passo é trazer mais gente do mesmo perfil."] },
+        { t: "2 ou 3", i: "g3", p: 1, c: ["Dá para dobrar isso.", "Quase sempre a perda está na primeira resposta: falta preço, foto ou um motivo para fechar agora."],
+          d: "De cada 10 que chamam, 7 ou 8 vão embora. Quase sempre a perda está na primeira resposta: falta preço, foto ou um motivo para fechar agora." },
+        { t: "Só 1", i: "g1", p: 0, c: ["Muita conversa, pouca venda.", "Ou está chegando gente fora do perfil, ou a conversa trava no preço. Os dois têm conserto."],
+          d: "9 de cada 10 conversas não viram venda. Ou está chegando gente fora do perfil, ou a conversa trava no preço." },
+        { t: "Quase nenhuma", i: "g0", p: 0, c: ["Aqui está o maior vazamento.", "Você paga para o cliente chamar e ele não compra. Antes de trazer mais gente, a conversa precisa mudar."],
+          d: "Você paga para o cliente chamar e ele não compra. É o maior vazamento do funil: trazer mais gente agora só aumenta a perda." },
+        { t: "Não faço ideia", i: "gq", p: 0, c: ["Sem esse número, você anuncia no escuro.", "Não dá para saber se o problema é o anúncio, o público ou o atendimento. Medir isso é o começo de qualquer gestão séria."],
+          d: "Sem esse número, não dá para saber se o problema é o anúncio, o público ou o atendimento. Você pode estar cortando o que funciona e mantendo o que não funciona." }
       ] },
     { id: "conteudo", titulo: "Como são as fotos e vídeos do seu negócio?", etapa: "Fotos e vídeos",
-      fraco: ["Mostre o seu produto de verdade", "Grave 3 vídeos de 15 segundos com o celular na vertical: o produto na mão, o produto em uso e você falando a condição."],
-      forte: ["Teste começos diferentes", "Grave o mesmo vídeo com 3 frases de abertura diferentes e veja qual traz mais mensagens."],
+      prob: "O cliente não vê o seu produto de verdade",
+      cam: "Vídeos curtos e reais, feitos no celular: o produto na mão, em uso, alguém falando a condição. Poucos vídeos bons, testados com começos diferentes, rendem mais que post todo dia.",
+      pixel: "Mesmo quando a gente cuida só dos anúncios, você tem ajuda nos vídeos. A gente passa o roteiro de cada vídeo, diz o que gravar e como começar, e mostra quais trazem mais conversa, para você gravar mais do que funciona.",
+      forte: ["Seus vídeos já prendem a atenção", "O próximo passo é testar: o mesmo vídeo com começos diferentes mostra qual frase traz mais mensagens. A gente organiza esses testes e te diz o que gravar a seguir."],
       ops: [
         { t: "Vídeos meus do produto", i: "video", p: 2, c: ["É isso que prende no Instagram.", "Vídeo real passa confiança. Agora é testar começos diferentes para ver qual traz mais gente."] },
-        { t: "Fotos minhas do produto", i: "foto", p: 1, c: ["Foto real já é meio caminho.", "O próximo passo é o vídeo: 15 segundos com o produto na mão prendem mais que qualquer foto."] },
-        { t: "Artes prontas do Canva", i: "canva", p: 1, c: ["A arte é bonita, mas parece a de todo mundo.", "O cliente quer ver o produto de verdade. Use o Canva para o texto e uma foto sua no centro."] },
-        { t: "Fotos do fornecedor", i: "banco", p: 0, c: ["O cliente já viu essa foto em outra loja.", "Foto do fornecedor não diz por que comprar de você. Uma foto sua, mesmo simples, passa mais confiança."] },
-        { t: "Quase não posto", i: "vazio", p: 0, c: ["Sem vitrine, o cliente passa direto.", "Não precisa postar todo dia. Poucos vídeos bons, feitos no celular, já resolvem o mês."] },
-        { t: "Alguém posta por mim", i: "alguem", p: 1, c: ["Ótimo ter ajuda. Confira se mostra o produto real.", "Post bonito que não mostra produto e preço não vende. Peça vídeos curtos do que você vende de verdade."] }
+        { t: "Fotos minhas do produto", i: "foto", p: 1, c: ["Foto real já é meio caminho.", "O próximo passo é o vídeo: 15 segundos com o produto na mão prendem mais que qualquer foto."],
+          d: "Foto real já passa confiança, mas no Instagram o vídeo prende muito mais. Sem vídeo, o anúncio perde a atenção nos primeiros segundos." },
+        { t: "Artes prontas do Canva", i: "canva", p: 1, c: ["A arte é bonita, mas parece a de todo mundo.", "O cliente quer ver o produto de verdade. Foto ou vídeo seu, com o texto por cima, passa mais confiança."],
+          d: "A arte é bonita, mas parece a de todo mundo. O cliente rola a tela sem perceber que é o seu negócio e o seu produto." },
+        { t: "Fotos do fornecedor", i: "banco", p: 0, c: ["O cliente já viu essa foto em outra loja.", "Foto do fornecedor não diz por que comprar de você. Uma foto sua, mesmo simples, passa mais confiança."],
+          d: "O cliente já viu essa foto em outra loja. Ela não diz por que comprar de você, e anúncio com foto de catálogo costuma passar batido." },
+        { t: "Quase não posto", i: "vazio", p: 0, c: ["Sem vitrine, o cliente passa direto.", "Não precisa postar todo dia. Poucos vídeos bons, feitos no celular, já resolvem o mês."],
+          d: "Sem vitrine, quem chega pelo anúncio entra no seu perfil e não encontra motivo para confiar." },
+        { t: "Alguém posta por mim", i: "alguem", p: 1, c: ["Ótimo ter ajuda. A questão é o que vai ao ar.", "Post bonito que não mostra produto e preço não vende. O que vende é o produto de verdade, com a condição clara."],
+          d: "Ter ajuda é ótimo. A questão é se o que vai ao ar mostra o produto, o preço e o caminho até o WhatsApp, ou se só fica bonito." }
       ] },
     { id: "verba", titulo: "Quanto você pode investir por mês em anúncio?", etapa: "Verba",
-      fraco: ["Defina uma verba fixa por mês", "Separe um valor fixo só para anúncio, nem que sejam R$ 10 por dia, e não mexa nele por 30 dias. Esse valor é pago direto ao Instagram."],
-      forte: ["Separe parte da verba para teste", "Deixe uma fatia fixa para testar vídeos novos. O resto fica no que já vende."],
+      prob: "A verba ainda não deixa o anúncio trabalhar",
+      cam: "Uma verba fixa por mês, mesmo pequena, concentrada em um produto e um público, e mexida só com base no número. Começar pequeno e aumentar no que vende é mais seguro que começar grande no escuro.",
+      pixel: "A gente planeja com você quanto investir, onde colocar cada real e quando vale aumentar. A verba é paga direto ao Instagram ou ao Google, no seu cartão, e o relatório mostra para onde foi cada real.",
+      forte: ["Sua verba dá para testar e crescer", "Com esse investimento, cada real precisa ser medido. A gente divide a verba entre o que já vende e os testes novos, e leva o dinheiro para o que traz cliente."],
       ops: [
-        { t: "Por enquanto, nada", i: "m0", p: 0, c: ["Dá para começar, mas devagar.", "Sem anúncio, você depende de quem já te conhece. Mesmo R$ 10 por dia já te colocam na frente de gente nova."] },
-        { t: "Até R$ 300", i: "m1", p: 0, c: ["Dá para começar, focando em um produto.", "Com pouca verba, o que funciona é um produto, um público e um anúncio por vez."] },
-        { t: "R$ 300 a R$ 600", i: "m2", p: 1, c: ["Dá para testar com calma.", "Com essa verba, um anúncio roda o mês inteiro e ainda testa duas versões."] },
-        { t: "R$ 600 a R$ 1.000", i: "m3", p: 1, c: ["Boa verba para começar firme.", "Dá para anunciar todos os dias e trocar o que não traz conversa."] },
+        { t: "Por enquanto, nada", i: "m0", p: 0, c: ["Dá para começar, mas devagar.", "Sem anúncio, você depende de quem já te conhece. Mesmo R$ 10 por dia já te colocam na frente de gente nova."],
+          d: "Sem verba de anúncio, você depende só de quem já te conhece, e o crescimento fica no ritmo da indicação." },
+        { t: "Até R$ 300", i: "m1", p: 0, c: ["Dá para começar, focando em um produto.", "Com pouca verba, o que funciona é um produto, um público e um anúncio por vez."],
+          d: "Com pouca verba, espalhar em muitos produtos e públicos faz o dinheiro acabar antes de o anúncio aprender quem compra." },
+        { t: "R$ 300 a R$ 600", i: "m2", p: 1, c: ["Dá para testar com calma.", "Com essa verba, um anúncio roda o mês inteiro e ainda testa duas versões."],
+          d: "Dá para rodar o mês inteiro, mas sem folga para errar. Um vídeo ou um público errado come boa parte do mês." },
+        { t: "R$ 600 a R$ 1.000", i: "m3", p: 1, c: ["Boa verba para começar firme.", "Dá para anunciar todos os dias e trocar o que não traz conversa."],
+          d: "Boa verba para começar firme. O risco é deixar rodando sem acompanhar e pagar por semanas pelo que não traz conversa." },
         { t: "R$ 1.000 a R$ 3.000", i: "m4", p: 2, c: ["Dá para testar e crescer.", "Com essa verba, dá para rodar várias versões ao mesmo tempo e colocar mais dinheiro no que vende."] },
         { t: "Mais de R$ 3.000", i: "m5", p: 2, c: ["Verba de quem quer crescer rápido.", "Com esse investimento, cada real precisa ser medido. É aí que a gestão profissional faz diferença."] }
       ] }
   ];
+  // quem cuida: também mostra com quem a Pixel estaria competindo (ou trabalhando junto).
+  // ponte = a frase do bloco "Como a Pixel entra no seu negócio", no resultado.
   var QUEM = {
-    id: "quemcuida", titulo: "Quem cuida do Instagram e dos anúncios hoje?",
+    id: "quemcuida", titulo: "Quem cuida do seu Instagram e dos anúncios hoje?",
     ops: [
-      { t: "Eu mesmo", i: "eu", c: ["Você faz tudo, e o dia não estica.", "Quem cuida da loja e do Instagram ao mesmo tempo quase sempre deixa um dos dois para depois."] },
-      { t: "Alguém da equipe", i: "equipe", c: ["Ter alguém dedicado ajuda muito.", "Combine uma meta simples com essa pessoa: quantas conversas por semana o Instagram precisa trazer."] },
-      { t: "Parente ou amigo", i: "amigo", c: ["Ajuda de casa é valiosa.", "Só confira se os posts mostram o produto, o preço e o caminho até o WhatsApp."] },
-      { t: "Um freelancer", i: "freela", c: ["Bom ter um profissional por perto.", "Peça para ele mostrar, todo mês, quantas conversas e vendas os anúncios trouxeram."] },
-      { t: "Uma agência", i: "agencia", c: ["Então você já investe no digital.", "A pergunta certa para a agência é quanto custou cada venda, não quantas curtidas vieram."] },
-      { t: "Ninguém", i: "ninguem", c: ["Então tem muito espaço para crescer.", "Sem ninguém olhando, o Instagram fica parado. Uma hora por semana, com rotina, já faz diferença no mês."] }
+      { t: "Eu mesmo", i: "eu", c: ["Você faz tudo, e o dia não estica.", "Quem cuida do negócio e do Instagram ao mesmo tempo quase sempre deixa um dos dois para depois. Normalmente, o anúncio."],
+        ponte: "Hoje está tudo com você. A ideia é tirar o anúncio das suas costas: você aprova, a gente executa e te mostra o número." },
+      { t: "Funcionário ou parente", i: "equipe", c: ["Ajuda de dentro é valiosa.", "Essa pessoa conhece o negócio. O que costuma faltar é método de anúncio e alguém para ler os números junto com ela."],
+        ponte: "Quem já te ajuda continua ajudando. A gente cuida dos anúncios e dá a essa pessoa um roteiro claro do que postar e gravar." },
+      { t: "Um freelancer", i: "freela", c: ["Bom ter um profissional por perto.", "Uma pessoa só raramente dá conta de post, arte, anúncio e relatório. Vale saber o que está ficando para depois."],
+        ponte: "Ninguém precisa sair. Seu freelancer segue nos posts e a gente cuida dos anúncios, da oferta e dos números, cada um no que faz melhor." },
+      { t: "Uma produtora", i: "produtora", c: ["Material bom é meio caminho.", "Vídeo bonito vende quando vira anúncio, aparece para o público certo e alguém mede qual traz mais conversa."],
+        ponte: "Seus vídeos continuam com a produtora. A gente transforma esse material em anúncio, descobre qual vende mais e diz o que vale gravar a seguir." },
+      { t: "Uma agência", i: "agencia", c: ["Então você já investe no digital.", "A pergunta certa para a agência é quanto custou cada cliente, não quantas curtidas vieram. Esse número precisa chegar todo mês."],
+        ponte: "Se você já tem agência, a sessão serve como segunda opinião: eu olho os seus anúncios com você e mostro o que eu manteria e o que eu mudaria." },
+      { t: "Ninguém", i: "ninguem", c: ["Então tem muito espaço para crescer.", "Sem ninguém olhando, o Instagram fica parado e o anúncio não existe. É aí que está o maior ganho."],
+        ponte: "Hoje ninguém cuida disso, e é aí que está o maior ganho. A gente assume os anúncios e te guia no resto, sem você precisar virar especialista." }
     ]
   };
   var ORDEM = [NICHO, DOR, PONTUADAS[0], PONTUADAS[1], PONTUADAS[2], PONTUADAS[3], QUEM, PONTUADAS[4]];
@@ -695,9 +777,9 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
 
   var FAIXAS = [
     { min: 0, max: 3, nome: "travado", titulo: 'Seu funil está <em class="emo">travado</em>.',
-      texto: "Hoje, muita gente que compraria de você nem chega a te ver, ou chega e vai embora. O plano começa pelo que destrava mais rápido." },
+      texto: "Hoje, muita gente que compraria de você nem chega a te ver, ou chega e vai embora. Abaixo, cada ponto que trava e o caminho para destravar." },
     { min: 4, max: 7, nome: "pela metade", titulo: 'Seu funil vende pela <em class="emo">metade</em>.',
-      texto: "Os clientes chegam, mas parte deles se perde entre a primeira mensagem e a venda. Dá para fechar esses buracos antes de colocar mais dinheiro." },
+      texto: "Os clientes chegam, mas parte deles se perde entre a primeira mensagem e a venda. Abaixo, onde estão esses buracos e como fechar cada um." },
     { min: 8, max: 10, nome: "acelerado", titulo: 'Seu funil está <em class="emo">acelerado</em>.',
       texto: "A base está certa. O próximo passo é trazer mais gente do mesmo perfil, sem perder a qualidade do atendimento." }
   ];
@@ -915,13 +997,15 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
 
   // o plano: primeiro o maior problema que a pessoa escolheu; depois o que trava, depois o que segura
   function plano() {
-    var dor = DOR.ops[st.resp.dor], itens = [{ tag: "Seu maior problema", acao: dor.a, p: null, etapa: DOR.etapa }];
+    var dor = DOR.ops[st.resp.dor], itens = [{ tag: "Seu maior problema", tit: dor.prob, d: dor.d, cam: dor.cam, px: dor.pixel, p: null }];
     PONTUADAS.map(function (q, ix) { var p = q.ops[st.resp[q.id]].p; return { q: q, p: p, ix: ix }; })
       .filter(function (x) { return x.p < 2 && x.q.id !== dor.liga; })
       .sort(function (a, b) { return a.p - b.p || a.ix - b.ix; })
-      .forEach(function (x) { itens.push({ tag: x.q.etapa + " · " + TEMP[x.p].toLowerCase(), acao: x.q.fraco, p: x.p }); });
+      .forEach(function (x) {
+        itens.push({ tag: x.q.etapa + " · " + TEMP[x.p].toLowerCase(), tit: x.q.prob, d: x.q.ops[st.resp[x.q.id]].d, cam: x.q.cam, px: x.q.pixel, p: x.p });
+      });
     var bons = PONTUADAS.filter(function (q) { return q.ops[st.resp[q.id]].p === 2; })
-      .map(function (q) { return { tag: q.etapa + " · acelera", acao: q.forte, p: 2 }; });
+      .map(function (q) { return { tag: q.etapa + " · acelera", tit: q.forte[0], px: q.forte[1], p: 2 }; });
     return { fazer: itens, bons: bons };
   }
 
@@ -972,11 +1056,18 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     el.innerHTML = '<button type="button" aria-expanded="' + aberto + '"><i class="q ' + (x.p == null ? "dor" : "p" + x.p) + '" aria-hidden="true"></i>' +
       '<span><small class="tag"></small><b></b></span>' +
       '<svg class="mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>' +
-      '<div class="corpo"><div><p class="mono hoje"></p><p class="acao"></p></div></div>';
+      '<div class="corpo"><div></div></div>';
     el.querySelector(".tag").textContent = x.tag;
-    el.querySelector("b").textContent = (k == null ? "" : pad(k + 1) + ". ") + x.acao[0];
-    el.querySelector(".hoje").textContent = x.p === 2 ? "Para manter" : "Faça hoje";
-    el.querySelector(".acao").textContent = x.acao[1];
+    el.querySelector("b").textContent = (k == null ? "" : pad(k + 1) + ". ") + x.tit;
+    var corpo = el.querySelector(".corpo > div");
+    [["O que está acontecendo", x.d, ""], ["O caminho", x.cam, ""],
+     [x.p === 2 ? "Como a gente leva mais longe" : "Com a Pixel", x.px, "px"]].forEach(function (b) {
+      if (!b[1]) return;
+      var bl = document.createElement("div"); bl.className = "bloco" + (b[2] ? " " + b[2] : "");
+      bl.innerHTML = '<p class="mono hoje"></p><p class="acao"></p>';
+      bl.firstChild.textContent = b[0]; bl.lastChild.textContent = b[1];
+      corpo.appendChild(bl);
+    });
     var bt = el.querySelector("button");
     bt.addEventListener("click", function () {
       var ab = el.getAttribute("data-aberta") !== "true";
@@ -997,6 +1088,8 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     var bons = $("#r-bons"), lista = $("#r-bons-lista"); lista.innerHTML = "";
     bons.hidden = !pl.bons.length;
     pl.bons.forEach(function (x) { lista.appendChild(cartao(x, null, false)); });
+
+    $("#r-ponte").textContent = QUEM.ops[st.resp.quemcuida].ponte;
 
     var anuncia = PONTUADAS[0].ops[st.resp.descoberta].p > 0;
     var dorEl = $("#r-dor"); dorEl.textContent = "Você disse que o seu maior problema é ";
@@ -1034,6 +1127,8 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
       anima(el, [{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }],
         { duration: 420, delay: 500 + Math.min(k, 5) * 90, easing: SUAVE, fill: "backwards" });
     });
+    anima($("#r-entra"), [{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }],
+      { duration: 420, delay: 900, easing: SUAVE, fill: "backwards" });
     anima($("#r-final"), [{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }],
       { duration: 420, delay: 1000, easing: SUAVE, fill: "backwards" });
   }
