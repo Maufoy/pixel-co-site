@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Teste do Lead Quente · Pixel Media</title>
-<meta name="description" content="Teste grátis de 1 minuto: descubra se o seu anúncio traz lead quente ou só curioso e receba, na hora, o plano com o que arrumar primeiro.">
+<title>Vendômetro · Pixel Media</title>
+<meta name="description" content="Vendômetro: teste grátis o seu funil de vendas em 1 minuto. Veja o que acelera e o que trava as suas vendas e receba o plano do que arrumar primeiro.">
 <meta name="theme-color" content="#F8F7F6">
-<meta property="og:title" content="Seu anúncio traz lead quente ou só curioso?">
-<meta property="og:description" content="Teste grátis de 1 minuto. No fim, sua temperatura de 0 a 12 e o plano com o que arrumar primeiro.">
+<meta property="og:title" content="Vendômetro: teste seu funil de vendas em 1 minuto. Grátis.">
+<meta property="og:description" content="7 toques, do anúncio ao WhatsApp. No fim, sua nota no Vendômetro e o plano com o que arrumar primeiro.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23C4962A'/%3E%3C/svg%3E">
@@ -29,7 +29,7 @@ window.QUIZ_CFG = {
   // Google Ads: deixe vazio até criar a conversão "Lead do quiz"
   googleAds: { id: "", leadLabel: "", contactLabel: "" },
   // nome do material, usado no Pixel, na planilha e na mensagem do WhatsApp
-  nome: "Teste do Lead Quente"
+  nome: "Vendômetro"
 };
 </script>
 
@@ -211,13 +211,15 @@ label.campo small { font-weight: 400; color: var(--grafite); }
 .placar .mono { color: var(--ouro); }
 .placar .num { font-size: clamp(72px, 22vw, 104px); font-weight: 800; letter-spacing: -0.05em; line-height: .95; font-variant-numeric: tabular-nums; margin: 12px 0 2px; }
 .placar .num small { font-size: .36em; color: #9C9893; letter-spacing: -0.02em; font-weight: 700; }
-.termo { margin: 14px 0 18px; }
-.termo .barra { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
-.termo .barra i { height: 10px; border-radius: 2px; background: #2A2826; transition: background .25s; }
-.termo .barra i.on { background: var(--ouro); }
-.termo .escala { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 8px; color: #9C9893; font-size: 12.5px; }
-.termo .escala span:nth-child(2) { text-align: center; }
-.termo .escala span:last-child { text-align: right; }
+.medidor { position: relative; max-width: 340px; margin: 14px auto 0; }
+.medidor svg { display: block; width: 100%; height: auto; overflow: visible; }
+.medidor .seg { stroke: #2A2826; transition: stroke .2s; }
+.medidor .seg.on { stroke: var(--ouro); }
+.medidor .ponteiro { transform-box: view-box; transform-origin: 120px 118px; transform: rotate(0deg); transition: transform 1.3s cubic-bezier(.2,.9,.25,1.18); }
+.medidor .escala { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 6px; color: #9C9893; font-size: 12.5px; }
+.medidor .escala span:nth-child(2) { text-align: center; }
+.medidor .escala span:last-child { text-align: right; }
+.placar .num.centro { text-align: center; margin: 4px 0 14px; font-size: clamp(56px, 16vw, 76px); }
 .placar h2 { color: var(--papel); }
 .placar h2 em.emo { color: var(--ouro); }
 .placar p { color: #D9D6D2; margin: 10px 0 0; font-size: 17px; }
@@ -276,18 +278,18 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   <main id="app">
     <!-- abertura -->
     <section class="screen on intro" id="s-intro" aria-labelledby="t-intro">
-      <p class="rotulo mono">Teste do Lead Quente · grátis · 1 minuto</p>
-      <h1 id="t-intro" tabindex="-1">Seu anúncio traz lead <em class="emo">quente</em> ou só curioso?</h1>
-      <p class="lead">Responda 7 toques sobre o seu anúncio. A cada toque, você vê o que aquela resposta faz com as suas vendas.</p>
+      <p class="rotulo mono">Vendômetro · teste grátis · 1 minuto</p>
+      <h1 id="t-intro" tabindex="-1">Teste seu funil de vendas em 1 <em class="emo">minuto</em>.</h1>
+      <p class="lead">O Vendômetro mede o caminho do anúncio até a venda em 7 toques. A cada toque, você vê se aquilo acelera ou trava as suas vendas.</p>
       <div class="ganha">
         <span class="mono">No fim, de graça</span>
         <ul>
-          <li>Sua temperatura, de 0 a 12: frio, morno ou quente</li>
-          <li>O plano com o que arrumar primeiro, na ordem</li>
-          <li>Uma cópia do plano no seu WhatsApp, se quiser</li>
+          <li>Sua nota no Vendômetro, de 0 a 12</li>
+          <li>Onde o seu funil trava, etapa por etapa</li>
+          <li>O plano com o que arrumar primeiro, com cópia no seu WhatsApp</li>
         </ul>
       </div>
-      <button class="faixa" type="button" id="comecar">Fazer o teste grátis</button>
+      <button class="faixa" type="button" id="comecar">Medir meu funil grátis</button>
       <p class="nota-pe">Sem cadastro para começar. Feito pela Pixel Media, agência de tráfego que nasceu em Macapá e atende o Brasil todo.</p>
     </section>
 
@@ -301,13 +303,13 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     <!-- dados -->
     <section class="screen" id="s-form" aria-labelledby="t-form">
       <p class="rotulo mono">Respostas completas</p>
-      <h2 id="t-form" tabindex="-1">Seu plano está <em class="emo">pronto</em>.</h2>
-      <p class="lead">Diga quem é você para liberar a sua temperatura e o plano. Eu olho o Instagram do seu negócio antes de te chamar.</p>
+      <h2 id="t-form" tabindex="-1">Seu Vendômetro está <em class="emo">pronto</em>.</h2>
+      <p class="lead">Diga quem é você para liberar a sua nota e o plano. Eu olho o Instagram do seu negócio antes de te chamar.</p>
       <div class="previa" aria-hidden="true">
         <div class="borrado">
-          <div class="placar" style="padding:18px 20px">
-            <div class="num" style="font-size:56px;margin:0" id="p-num">7<small> / 12</small></div>
-            <div class="termo" style="margin:10px 0 0"><div class="barra" id="p-barra"></div></div>
+          <div class="placar" style="padding:18px 20px 8px">
+            <div class="medidor" id="p-medidor" style="max-width:240px;margin-top:0"></div>
+            <div class="num centro" id="p-num" style="font-size:44px;margin:0 0 6px"></div>
           </div>
         </div>
         <div class="cadeado"><span><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 7V5a4 4 0 1 1 8 0v2h.5A1.5 1.5 0 0 1 14 8.5v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5v-5A1.5 1.5 0 0 1 3.5 7H4zm2 0h4V5a2 2 0 1 0-4 0v2z"/></svg>Liberado ao enviar</span></div>
@@ -334,11 +336,8 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     <section class="screen" id="s-res" aria-labelledby="t-res">
       <div class="placar">
         <span class="mono" id="r-rotulo">Resultado</span>
-        <div class="num" id="r-num"></div>
-        <div class="termo">
-          <div class="barra" id="r-barra" aria-hidden="true"></div>
-          <div class="escala" aria-hidden="true"><span>Frio</span><span>Morno</span><span>Quente</span></div>
-        </div>
+        <div class="medidor" id="r-medidor" aria-hidden="true"></div>
+        <div class="num centro" id="r-num"></div>
         <h2 id="t-res" tabindex="-1"></h2>
         <p id="r-texto"></p>
       </div>
@@ -425,7 +424,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   };
 
   /* ---------- conteúdo ---------- */
-  // pts: 2 = quente, 1 = morno, 0 = frio
+  // pts: 2 = acelera, 1 = segura, 0 = trava
   var NICHO = {
     id: "nicho", titulo: "Qual é o seu negócio?",
     ops: [
@@ -490,14 +489,14 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   var TODAS = [NICHO].concat(PERGUNTAS);
   var TOTAL = TODAS.length;
   var MAX = PERGUNTAS.length * 2;
-  var TEMP = ["Frio", "Morno", "Quente"];
+  var TEMP = ["Trava", "Segura", "Acelera"];
 
   var FAIXAS = [
-    { min: 0, max: 4, nome: "frio", titulo: 'Seu lead está <em class="emo">frio</em>.',
+    { min: 0, max: 4, nome: "travado", titulo: 'Seu funil está <em class="emo">travado</em>.',
       texto: "Hoje não dá para saber se o anúncio vende ou só gasta. O primeiro passo é medir: de onde vem cada lead e quanto custa cada venda." },
-    { min: 5, max: 8, nome: "morno", titulo: 'Seu lead está <em class="emo">morno</em>.',
+    { min: 5, max: 8, nome: "pela metade", titulo: 'Seu funil vende pela <em class="emo">metade</em>.',
       texto: "Os leads chegam, mas parte da verba escorre entre o anúncio e a venda. Dá para fechar esses buracos antes de colocar mais dinheiro." },
-    { min: 9, max: 12, nome: "quente", titulo: 'Seu lead está <em class="emo">quente</em>.',
+    { min: 9, max: 12, nome: "acelerado", titulo: 'Seu funil está <em class="emo">acelerado</em>.',
       texto: "A base está certa. O próximo passo é testar versões e colocar mais verba no que traz venda, sem perder a qualidade do lead." }
   ];
 
@@ -547,7 +546,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   }
   var pad = function (n) { return (n < 10 ? "0" : "") + n; };
 
-  // os 7 quadrados do topo: preto = negócio, ouro = quente, ouro claro = morno, cinza = frio
+  // os 7 quadrados do topo: preto = negócio, ouro = acelera, ouro claro = segura, cinza = trava
   var pix = $("#pixels");
   for (var k = 0; k < TOTAL; k++) pix.appendChild(document.createElement("i"));
   function pintaPixels(popEm) {
@@ -606,9 +605,23 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     return PERGUNTAS.reduce(function (s, q) { var j = st.resp[q.id]; return s + (j == null ? 0 : q.ops[j].p); }, 0);
   }
   function faixa(n) { return FAIXAS.filter(function (f) { return n >= f.min && n <= f.max; })[0]; }
-  function barra(el, n) {
-    var h = ""; for (var k = 0; k < MAX; k++) h += '<i class="' + (k < n ? "on" : "") + '"></i>';
-    el.innerHTML = h;
+  // velocímetro: 12 segmentos em meia-lua e um ponteiro que sobe até a nota
+  function medidor(el, n, anima) {
+    var cx = 120, cy = 118, r = 94, s = "", passo = Math.PI / MAX;
+    for (var k = 0; k < MAX; k++) {
+      var a0 = Math.PI - k * passo - 0.025, a1 = Math.PI - (k + 1) * passo + 0.025;
+      s += '<path class="seg" d="M' + (cx + r * Math.cos(a0)).toFixed(2) + " " + (cy - r * Math.sin(a0)).toFixed(2) +
+        "A" + r + " " + r + " 0 0 1 " + (cx + r * Math.cos(a1)).toFixed(2) + " " + (cy - r * Math.sin(a1)).toFixed(2) +
+        '" fill="none" stroke-width="18" style="transition-delay:' + (anima ? 250 + k * 70 : 0) + 'ms"/>';
+    }
+    s += '<g class="ponteiro"><path d="M120 111L40 118L120 125Z" fill="#F8F7F6"/><circle cx="120" cy="118" r="10" fill="#C4962A"/></g>';
+    el.innerHTML = '<svg viewBox="0 0 240 128">' + s + "</svg>" +
+      '<div class="escala"><span>Travado</span><span>Pela metade</span><span>Acelerado</span></div>';
+    var aplica = function () {
+      el.querySelectorAll(".seg").forEach(function (g, k) { g.classList.toggle("on", k < n); });
+      el.querySelector(".ponteiro").style.transform = "rotate(" + (n / MAX * 180) + "deg)";
+    };
+    if (anima) setTimeout(aplica, 120); else { el.querySelector(".ponteiro").style.transition = "none"; aplica(); }
   }
 
   $("#comecar").addEventListener("click", function () { st.i = 0; show("#s-q"); renderQ(); });
@@ -620,7 +633,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
       px("trackCustom", "QuizRespondido", { quiz: "trafego", nota: nota(), nicho: NICHO.ops[st.resp.nicho].t });
       // a prévia borrada usa a nota real da pessoa
       $("#p-num").innerHTML = nota() + "<small> / " + MAX + "</small>";
-      barra($("#p-barra"), nota());
+      medidor($("#p-medidor"), nota(), false);
       show("#s-form");
     }
   });
@@ -661,7 +674,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     return !msg;
   }
 
-  // o plano: todas as etapas, da mais fria para a mais quente
+  // o plano: todas as etapas, da que mais trava para a que mais acelera
   function plano() {
     return PERGUNTAS.map(function (q, ix) { var p = q.ops[st.resp[q.id]].p; return { q: q, p: p, ix: ix, acao: p < 2 ? q.fraco : q.forte }; })
       .sort(function (a, b) { return a.p - b.p || a.ix - b.ix; });
@@ -708,9 +721,8 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   /* ---------- resultado ---------- */
   function resultado(d, f) {
     $("#passo").textContent = "Seu plano";
-    $("#r-rotulo").textContent = d.nome.split(" ")[0] + ", esta é a sua temperatura";
+    $("#r-rotulo").textContent = d.nome.split(" ")[0] + ", este é o seu Vendômetro";
     $("#r-num").innerHTML = d.nota + '<small> / ' + MAX + '</small>';
-    barra($("#r-barra"), d.nota);
     $("#t-res").innerHTML = f.titulo;
     $("#r-texto").textContent = f.texto;
 
@@ -743,7 +755,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     if (!linhas.length) linhas = etapas.slice(0, 2);
     var msg = "Oi! Fiz o " + CFG.nome + " da Pixel Media.\n" +
       "Sou " + d.nome + ", do " + d.instagram + " (" + d.nicho + ").\n" +
-      "Minha temperatura: " + d.nota + "/" + MAX + ", " + f.nome + ".\n\n" +
+      "Minha nota: " + d.nota + "/" + MAX + ", " + f.nome + ".\n\n" +
       "Meu plano:\n" + linhas.map(function (x, k) { return (k + 1) + ". " + x.acao[0]; }).join("\n") + "\n\n" +
       "Quero o Raio-X " + (anuncia ? "dos meus anúncios." : "do meu negócio.");
     var a = $("#r-zap");
@@ -755,6 +767,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     }, { once: true });
 
     show("#s-res");
+    medidor($("#r-medidor"), d.nota, true);
   }
 })();
 </script>
