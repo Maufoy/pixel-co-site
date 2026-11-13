@@ -279,7 +279,13 @@ label.campo small { font-weight: 400; color: var(--grafite); }
 .etapa .acao { margin: 0; color: var(--tinta2); font-size: 16px; }
 .bons-rot { margin-top: 26px; }
 .final { margin-top: 24px; }
-.final p.sub { color: var(--tinta2); margin: 16px 0 0; font-size: 16px; }
+.convite .mono { color: var(--ouro); margin: 0; }
+.convite h3 { color: var(--papel); font-size: clamp(23px, 5.6vw, 30px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.12; margin: 10px 0 0; text-wrap: balance; }
+.convite h3 em.emo { color: var(--ouro); }
+.ganhos { list-style: none; margin: 18px 0 22px; padding: 0; display: grid; gap: 10px; }
+.ganhos li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; align-items: baseline; color: #D9D6D2; font-size: 16px; line-height: 1.4; }
+.ganhos li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--ouro); transform: translateY(1px); }
+.convite p.sub { color: #9C9893; margin: 14px 0 0; font-size: 14px; }
 
 footer { margin-top: 24px; }
 footer .wrap { padding-bottom: max(26px, env(safe-area-inset-bottom)); }
@@ -342,7 +348,7 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     <div class="intro-txt">
       <p class="rotulo mono">Vendômetro · teste grátis</p>
       <h1 id="t-intro" tabindex="-1">Teste seu funil de vendas em 1 <em class="emo">minuto</em>.</h1>
-      <p class="lead">São 8 toques, sem nenhuma palavra difícil. No fim, você recebe a nota de 0 a 10 e o que fazer hoje para vender mais, com cópia no seu WhatsApp.</p>
+      <p class="lead">São 8 toques, sem nenhuma palavra difícil. No fim, você recebe a nota de 0 a 10 e o que fazer hoje para vender mais.</p>
     </div>
     <div class="intro-vis">
       <div class="painel" data-visual>
@@ -359,7 +365,7 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     <div class="intro-acao">
       <button class="faixa" type="button" id="comecar">Medir meu funil grátis</button>
       <ul class="fatos mono">
-        <li>1 minuto</li><li>Sem cadastro para começar</li><li>Pixel Media, de Macapá para o Brasil</li>
+        <li>1 minuto</li><li>Resultado na hora</li><li>Pixel Media, de Macapá para o Brasil</li>
       </ul>
     </div>
    </div>
@@ -449,9 +455,17 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
           <p class="rotulo mono bons-rot">O que já está bom</p>
           <div class="plano" id="r-bons-lista"></div>
         </div>
-        <div class="final" id="r-final">
-          <a class="faixa" id="r-zap" href="https://wa.me/5511940374318" target="_blank" rel="noopener">Receber meu plano no WhatsApp</a>
-          <p class="sub" id="r-sub"></p>
+        <div class="final painel convite" id="r-final">
+          <p class="mono">Próximo passo</p>
+          <h3>Vamos resolver isso juntos, numa <em class="emo">sessão estratégica</em> grátis.</h3>
+          <ul class="ganhos">
+            <li>20 minutos por chamada de vídeo, de qualquer lugar do Brasil</li>
+            <li id="r-ganho">Eu abro seus anúncios e o seu Instagram com você, ao vivo</li>
+            <li>Você sai com os 3 primeiros ajustes e uma ideia de oferta para o seu negócio</li>
+            <li>Sem custo e sem compromisso</li>
+          </ul>
+          <a class="faixa" id="r-zap" href="https://wa.me/5511940374318" target="_blank" rel="noopener">Quero minha sessão estratégica grátis</a>
+          <p class="sub">Você vai para o WhatsApp da Pixel Media com a mensagem pronta. É só enviar e escolher o horário.</p>
         </div>
       </div>
     </div>
@@ -979,16 +993,13 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
     pl.bons.forEach(function (x) { lista.appendChild(cartao(x, null, false)); });
 
     var anuncia = PONTUADAS[0].ops[st.resp.descoberta].p > 0;
-    $("#r-sub").textContent = "A mensagem já leva o seu plano, então ele fica salvo na conversa. Se quiser, eu " +
-      (anuncia ? "abro seus anúncios com você" : "olho o seu Instagram e os anúncios dos seus concorrentes com você") +
-      " numa chamada de 20 minutos e mostro o que eu mudaria primeiro. É o Raio-X, sem custo, de qualquer lugar do Brasil.";
+    $("#r-ganho").textContent = anuncia ? "Eu abro seus anúncios e o seu Instagram com você, ao vivo"
+      : "Eu olho o seu Instagram e o que os seus concorrentes anunciam, ao vivo";
 
-    var msg = "Oi! Fiz o " + CFG.nome + " da Pixel Media.\n" +
+    var msg = "Oi! Fiz o " + CFG.nome + " da Pixel Media e tirei " + d.nota + "/" + MAX + " (" + f.nome + ").\n" +
       "Sou " + d.nome + ", do " + d.instagram + " (" + d.nicho + ").\n" +
-      "Minha nota: " + d.nota + "/" + MAX + ", " + f.nome + ".\n" +
       "Meu maior problema: " + DOR.ops[st.resp.dor].t.toLowerCase() + ".\n\n" +
-      "Meu plano:\n" + pl.fazer.slice(0, 3).map(function (x, k) { return (k + 1) + ". " + x.acao[0]; }).join("\n") + "\n\n" +
-      "Quero o Raio-X " + (anuncia ? "dos meus anúncios." : "do meu negócio.");
+      "Quero agendar minha sessão estratégica grátis. Qual o melhor horário?";
     var a = $("#r-zap");
     if (CFG.whatsapp) a.href = "https://wa.me/" + CFG.whatsapp + "?text=" + encodeURIComponent(msg);
     a.addEventListener("click", function () {
