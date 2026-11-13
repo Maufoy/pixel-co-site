@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-type="service">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vendômetro · Pixel Media</title>
 <meta name="description" content="Vendômetro: teste grátis o seu funil de vendas em 1 minuto. Veja o que acelera e o que trava as suas vendas e receba o plano do que arrumar primeiro.">
+<meta name="page-type" content="service">
+<meta name="site-kind" content="other">
 <meta name="theme-color" content="#F8F7F6">
 <meta property="og:title" content="Vendômetro: teste seu funil de vendas em 1 minuto. Grátis.">
 <meta property="og:description" content="7 toques, do anúncio ao WhatsApp. No fim, sua nota no Vendômetro e o plano com o que arrumar primeiro.">
@@ -52,10 +54,11 @@ fbq('track', 'PageView');
   --papel: #F8F7F6;
   --branco: #FFFFFF;
   --tinta: #0A0909;
+  --tinta-2: #161413;
   --tinta2: #333333;
   --grafite: #6B6B6B;
   --linha: #E6E5E3;
-  --linha2: #D6D4D0;
+  --linha2: #D9D7D3;
   --ouro: #C4962A;
   --ouro-claro: #E4C98C;
   --ouro-fundo: #FBF4E4;
@@ -64,7 +67,8 @@ fbq('track', 'PageView');
   --frio: #8C8984;
   --erro: #B3261E;
   --raio: 28px;
-  --gutter: 16px;
+  --gutter: 20px;
+  --larg: 1120px;
   --mola: cubic-bezier(.2,.7,.2,1);
 }
 * { box-sizing: border-box; }
@@ -73,26 +77,91 @@ body {
   margin: 0; background: var(--papel); color: var(--tinta);
   font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 17px; line-height: 1.5; min-height: 100vh; min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; display: flex; flex-direction: column;
 }
 body.folha-aberta { padding-bottom: var(--folha-h, 0px); }
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--ouro-escuro); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
+.pular { position: absolute; left: 12px; top: -60px; background: var(--tinta); color: var(--papel); padding: 10px 14px; border-radius: 8px; z-index: 20; text-decoration: none; font-weight: 700; }
+.pular:focus { top: 12px; }
 
-.wrap { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 var(--gutter); }
-header.top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: max(18px, env(safe-area-inset-top)); padding-bottom: 14px; gap: 12px;
+.wrap { width: 100%; max-width: var(--larg); margin: 0 auto; padding: 0 var(--gutter); }
+header.top .wrap {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-top: max(18px, env(safe-area-inset-top)); padding-bottom: 18px;
 }
 header.top svg { height: 21px; width: auto; display: block; }
+main { flex: 1; }
 /* "DM Sans Rótulo" (guia da marca, 12/11): DM Sans Medium, tamanho óptico 9, algarismos tabulares, +2% */
 .mono { font-family: "DM Sans", system-ui, sans-serif; font-weight: 500; font-variation-settings: "opsz" 9; font-optical-sizing: none; font-size: 13.5px; letter-spacing: 0.02em; color: var(--grafite); font-variant-numeric: tabular-nums; }
 
-/* progresso: um quadrado por pergunta, que acende conforme a resposta */
-.trilha { display: none; align-items: center; gap: 12px; margin: 4px 0 26px; }
-.trilha.on { display: flex; }
-.trilha .seta { flex: none; width: 36px; height: 36px; border: 0; background: none; padding: 0; display: grid; place-items: center; border-radius: 8px; color: var(--grafite); }
+.rotulo { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+.rotulo::before { content: ""; width: 22px; height: 2px; background: var(--ouro); flex: none; }
+
+h1, h2 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.04; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(38px, 10vw, 76px); }
+h2 { font-size: clamp(27px, 6.6vw, 44px); }
+em.emo {
+  font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 500;
+  font-size: 1.1em; letter-spacing: -0.01em; color: var(--ouro-escuro);
+}
+.lead { color: var(--tinta2); font-size: 18px; margin: 18px 0 0; max-width: 32em; }
+
+/* telas */
+.screen { display: none; padding-bottom: 40px; }
+.screen.on { display: block; animation: entra .45s var(--mola) both; }
+.intro.on { display: grid; }
+@keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* pedido: faixa ouro, texto tinta, com o degrau de botão de toque */
+.faixa {
+  display: block; width: 100%; border: 0; border-radius: 14px; background: var(--ouro); color: var(--tinta);
+  font-weight: 800; font-size: 18px; letter-spacing: -0.01em; text-align: left; padding: 19px 22px;
+  text-decoration: none; box-shadow: 0 4px 0 var(--ouro-profundo); margin-bottom: 4px;
+  transition: background .2s, transform .1s, box-shadow .1s;
+}
+.faixa:hover { background: #CFA23A; transform: translateY(-1px); box-shadow: 0 5px 0 var(--ouro-profundo); }
+.faixa:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ouro-profundo); }
+.faixa[disabled] { background: var(--linha); color: var(--grafite); box-shadow: 0 4px 0 var(--linha2); cursor: default; transform: none; }
+
+/* ---------- abertura ---------- */
+.intro { gap: 0; grid-template-areas: "txt" "vis" "acao"; padding-top: 8px; }
+.intro-txt { grid-area: txt; }
+.intro-vis { grid-area: vis; margin-top: 24px; }
+.intro-acao { grid-area: acao; margin-top: 22px; }
+.fatos { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+.fatos li { display: flex; align-items: center; gap: 8px; }
+.fatos li::before { content: ""; width: 8px; height: 8px; border-radius: 1.5px; background: var(--ouro); }
+
+/* painel escuro do Vendômetro */
+.painel { background: var(--tinta); color: var(--papel); border-radius: var(--raio); padding: 22px 22px 20px; position: relative; overflow: hidden; }
+.painel .mono { color: var(--ouro); }
+.painel-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.painel-topo .mono:last-child:not(:only-child) { color: #9C9893; }
+.painel .leitura { text-align: center; font-size: clamp(46px, 13vw, 64px); font-weight: 800; letter-spacing: -0.05em; line-height: 1; font-variant-numeric: tabular-nums; margin: 2px 0 0; }
+.painel .leitura small { font-size: .4em; color: #9C9893; letter-spacing: -0.02em; font-weight: 700; }
+.legenda { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid #2A2826; list-style: none; color: #D9D6D2; font-size: 14px; }
+.legenda li { display: flex; align-items: center; gap: 8px; }
+.legenda i { width: 10px; height: 10px; border-radius: 2px; }
+.painel .entrega { margin: 14px 0 0; color: #B9B5AF; font-size: 15px; text-align: center; }
+
+/* velocímetro */
+.medidor { position: relative; width: 100%; max-width: 360px; margin: 14px auto 0; }
+.medidor svg { display: block; width: 100%; height: auto; overflow: visible; }
+.medidor .seg { stroke: #2A2826; transition: stroke .2s; }
+.medidor .seg.on { stroke: var(--ouro); }
+.medidor .ponteiro { transform-box: view-box; transform-origin: 120px 118px; transform: rotate(0deg); transition: transform 1.2s cubic-bezier(.2,.9,.25,1.15); }
+.medidor .escala { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 6px; color: #9C9893; font-size: 12.5px; }
+.medidor .escala span:nth-child(2) { text-align: center; }
+.medidor .escala span:last-child { text-align: right; }
+
+/* ---------- perguntas ---------- */
+.q-grid { display: grid; gap: 28px; }
+.q-lado { display: none; }
+.trilha { display: flex; align-items: center; gap: 12px; margin: 0 0 26px; }
+.trilha .seta { flex: none; width: 44px; height: 44px; margin-left: -10px; border: 0; background: none; padding: 0; display: grid; place-items: center; border-radius: 10px; color: var(--grafite); transition: background .15s; }
 .trilha .seta:hover { background: var(--linha); }
 .trilha .seta svg { width: 20px; height: 20px; }
 .pixels { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
@@ -104,65 +173,27 @@ header.top svg { height: 21px; width: auto; display: block; }
 .pixels i.nicho { background: var(--tinta); }
 .pixels i.pop { animation: pop .45s var(--mola); }
 @keyframes pop { 40% { transform: scaleY(1.7); } }
-
-.rotulo { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
-.rotulo::before { content: ""; width: 22px; height: 2px; background: var(--ouro); flex: none; }
-
-h1, h2 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; margin: 0; text-wrap: balance; }
-h1 { font-size: clamp(34px, 9.4vw, 52px); }
-h2 { font-size: clamp(26px, 7vw, 36px); }
-em.emo {
-  font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 500;
-  font-size: 1.1em; letter-spacing: -0.01em; color: var(--ouro-escuro);
-}
-.lead { color: var(--tinta2); font-size: 18px; margin: 16px 0 0; max-width: 34em; }
-
-/* tela */
-.screen { display: none; padding-bottom: 48px; }
-.screen.on { display: block; animation: entra .45s var(--mola) both; }
-@keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-
-/* abertura */
-.intro { padding-top: 12px; }
-.ganha { margin: 26px 0 28px; background: var(--branco); border: 2px solid var(--linha); border-bottom-width: 4px; border-radius: 20px; padding: 18px 18px 16px; }
-.ganha .mono { display: block; margin-bottom: 10px; }
-.ganha ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.ganha li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; align-items: baseline; font-size: 16.5px; line-height: 1.35; }
-.ganha li::before { content: ""; width: 12px; height: 12px; border-radius: 2.2px; background: var(--ouro); transform: translateY(1px); }
-
-/* pedido: faixa ouro, texto tinta (com o "degrau" de botão de toque) */
-.faixa {
-  display: block; width: 100%; border: 0; border-radius: 14px; background: var(--ouro); color: var(--tinta);
-  font-weight: 800; font-size: 18px; letter-spacing: -0.01em; text-align: left; padding: 18px 22px;
-  text-decoration: none; box-shadow: 0 4px 0 var(--ouro-profundo); margin-bottom: 4px;
-  transition: background .2s, transform .08s, box-shadow .08s;
-}
-.faixa:hover { background: #CFA23A; }
-.faixa:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ouro-profundo); }
-.faixa[disabled] { background: var(--linha); color: var(--grafite); box-shadow: 0 4px 0 var(--linha2); cursor: default; }
-.nota-pe { font-size: 14px; color: var(--grafite); margin: 16px 0 0; }
-
-/* pergunta */
 .q-num { margin-bottom: 10px; }
-.q-sub { color: var(--grafite); font-size: 15.5px; margin: 8px 0 0; }
+
 .ladrilhos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
 .lad {
-  position: relative; aspect-ratio: 1 / 1.12; min-height: 0;
+  position: relative; aspect-ratio: 1 / 1.1;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-  background: var(--branco); border: 2px solid var(--linha); border-bottom-width: 5px; border-radius: 18px;
+  background: var(--branco); border: 1.5px solid var(--linha2); border-bottom-width: 5px; border-radius: 20px;
   padding: 10px 6px 8px; text-align: center;
   font-size: 14px; font-weight: 700; line-height: 1.18; letter-spacing: -0.01em;
-  transition: border-color .15s, background .15s, transform .08s, opacity .25s;
+  transition: border-color .15s, background .15s, transform .12s var(--mola), opacity .25s;
 }
-.lad svg { width: 66%; max-width: 76px; height: auto; flex: none; }
+.lad svg { width: 64%; max-width: 84px; height: auto; flex: none; transition: transform .25s var(--mola); }
 .lad span { display: block; text-wrap: balance; }
-.lad:hover { background: #FCFBFA; }
-.lad:active { transform: translateY(3px); border-bottom-width: 2px; margin-top: 3px; }
+.lad:hover { transform: translateY(-2px); border-color: #C9C6C1; }
+.lad:hover svg { transform: scale(1.04); }
+.lad:active { transform: translateY(3px); border-bottom-width: 2px; }
 .lad[aria-pressed="true"] { border-color: var(--ouro); background: var(--ouro-fundo); color: var(--ouro-profundo); animation: escolhe .4s var(--mola); }
-@keyframes escolhe { 40% { transform: scale(1.06); } }
+@keyframes escolhe { 40% { transform: scale(1.05); } }
 .ladrilhos.escolhido .lad:not([aria-pressed="true"]) { opacity: .5; }
 
-/* folha de resposta: sobe de baixo, como em app de idioma */
+/* folha de resposta: sobe de baixo */
 .folha {
   visibility: hidden;
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
@@ -172,7 +203,7 @@ em.emo {
   box-shadow: 0 -10px 30px rgba(10, 9, 9, .14);
 }
 .folha.on { transform: none; visibility: visible; transition: transform .38s var(--mola), visibility 0s; }
-.folha .wrap { display: grid; gap: 0; }
+.folha .wrap { max-width: 760px; display: grid; gap: 0; }
 .temp { display: inline-flex; align-items: center; gap: 8px; font-family: "DM Sans", system-ui, sans-serif; font-weight: 500; font-variation-settings: "opsz" 9; font-size: 13.5px; letter-spacing: .02em; color: var(--ouro); }
 .temp i { width: 10px; height: 10px; border-radius: 2px; background: var(--ouro); }
 .temp.t1 i { background: var(--ouro-claro); }
@@ -183,53 +214,40 @@ em.emo {
 .folha p { margin: 0; color: #D9D6D2; font-size: 16px; line-height: 1.45; }
 .folha .faixa { margin-top: 18px; }
 
-/* formulário */
-.previa { position: relative; margin-top: 22px; border-radius: 20px; overflow: hidden; }
-.previa .borrado { filter: blur(6px); opacity: .75; pointer-events: none; user-select: none; }
-.previa .cadeado {
-  position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
-}
-.previa .cadeado span { background: var(--tinta); color: var(--papel); border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+/* ---------- formulário ---------- */
+.f-grid { display: grid; gap: 26px; }
+.previa { position: relative; margin-top: 24px; border-radius: var(--raio); overflow: hidden; }
+.previa .borrado { filter: blur(7px); opacity: .8; pointer-events: none; user-select: none; }
+.previa .cadeado { position: absolute; inset: 0; display: grid; place-items: center; }
+.previa .cadeado span { background: var(--papel); color: var(--tinta); border-radius: 6px; padding: 10px 14px; font-size: 14px; font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
 .previa .cadeado svg { width: 14px; height: 14px; }
-form { margin-top: 22px; display: grid; gap: 14px; }
+form { display: grid; gap: 14px; align-content: start; }
 label.campo { display: grid; gap: 6px; font-weight: 700; font-size: 15px; }
 label.campo small { font-weight: 400; color: var(--grafite); }
 .in {
-  width: 100%; background: var(--branco); border: 2px solid var(--linha); border-radius: 14px;
+  width: 100%; background: var(--branco); border: 1.5px solid var(--linha2); border-radius: 14px;
   padding: 14px 16px; font-size: 17px; font-weight: 500; transition: border-color .2s;
 }
+.in:hover { border-color: #C9C6C1; }
 .in:focus { outline: none; border-color: var(--tinta); }
 .in[aria-invalid="true"] { border-color: var(--erro); }
-.erro { color: var(--erro); font-size: 14px; font-weight: 500; min-height: 0; }
+.erro { color: var(--erro); font-size: 14px; font-weight: 500; }
+.erro:empty { display: none; }
 .insta { position: relative; }
 .insta span { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--grafite); font-weight: 500; pointer-events: none; }
 .insta .in { padding-left: 36px; }
 .lgpd { font-size: 13.5px; color: var(--grafite); margin: 2px 0 0; line-height: 1.45; }
 
-/* resultado */
-.placar { background: var(--tinta); color: var(--papel); border-radius: var(--raio); padding: 24px 22px 22px; }
-.placar .mono { color: var(--ouro); }
-.placar .num { font-size: clamp(72px, 22vw, 104px); font-weight: 800; letter-spacing: -0.05em; line-height: .95; font-variant-numeric: tabular-nums; margin: 12px 0 2px; }
-.placar .num small { font-size: .36em; color: #9C9893; letter-spacing: -0.02em; font-weight: 700; }
-.medidor { position: relative; max-width: 340px; margin: 14px auto 0; }
-.medidor svg { display: block; width: 100%; height: auto; overflow: visible; }
-.medidor .seg { stroke: #2A2826; transition: stroke .2s; }
-.medidor .seg.on { stroke: var(--ouro); }
-.medidor .ponteiro { transform-box: view-box; transform-origin: 120px 118px; transform: rotate(0deg); transition: transform 1.3s cubic-bezier(.2,.9,.25,1.18); }
-.medidor .escala { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 6px; color: #9C9893; font-size: 12.5px; }
-.medidor .escala span:nth-child(2) { text-align: center; }
-.medidor .escala span:last-child { text-align: right; }
-.placar .num.centro { text-align: center; margin: 4px 0 14px; font-size: clamp(56px, 16vw, 76px); }
-.placar h2 { color: var(--papel); }
+/* ---------- resultado ---------- */
+.r-grid { display: grid; gap: 28px; }
+.placar h2 { color: var(--papel); margin-top: 18px; }
 .placar h2 em.emo { color: var(--ouro); }
-.placar p { color: #D9D6D2; margin: 10px 0 0; font-size: 17px; }
-
-.secao { margin-top: 30px; }
-.secao > .mono { display: block; margin-bottom: 12px; }
+.placar p.r-texto { color: #D9D6D2; margin: 10px 0 0; font-size: 17px; }
 .plano { display: grid; gap: 10px; }
-.etapa { background: var(--branco); border: 2px solid var(--linha); border-bottom-width: 4px; border-radius: 18px; overflow: hidden; }
+.etapa { background: var(--branco); border: 1px solid var(--linha); border-radius: 20px; overflow: hidden; transition: border-color .15s; }
+.etapa:hover { border-color: var(--linha2); }
 .etapa > button {
-  width: 100%; border: 0; background: none; text-align: left; padding: 15px 16px;
+  width: 100%; border: 0; background: none; text-align: left; padding: 16px 16px; min-height: 64px;
   display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center;
 }
 .etapa .q { width: 18px; height: 18px; border-radius: 4px; }
@@ -237,22 +255,47 @@ label.campo small { font-weight: 400; color: var(--grafite); }
 .etapa .q.p1 { background: var(--ouro-claro); }
 .etapa .q.p0 { background: var(--frio); }
 .etapa b { display: block; font-size: 16.5px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; }
-.etapa small { display: block; font-size: 13px; color: var(--grafite); margin-top: 2px; }
+.etapa small { display: block; font-size: 13px; color: var(--grafite); margin-top: 3px; }
 .etapa .mais { width: 22px; height: 22px; color: var(--grafite); transition: transform .25s var(--mola); }
 .etapa[data-aberta="true"] .mais { transform: rotate(45deg); }
-.etapa .corpo { display: none; padding: 0 16px 16px 50px; color: var(--tinta2); font-size: 16px; }
+.etapa .corpo { display: none; padding: 0 18px 18px 50px; color: var(--tinta2); font-size: 16px; }
 .etapa[data-aberta="true"] .corpo { display: block; animation: entra .3s var(--mola) both; }
-.final { margin-top: 26px; }
-.final p.sub { color: var(--tinta2); margin: 16px 0 0; }
+.final { margin-top: 24px; }
+.final p.sub { color: var(--tinta2); margin: 16px 0 0; font-size: 16px; }
 
-footer { padding: 28px 0 max(28px, env(safe-area-inset-bottom)); border-top: 1px solid var(--linha); margin-top: 24px; }
-footer p { margin: 0; font-size: 13px; color: var(--grafite); }
+footer { margin-top: 24px; }
+footer .wrap { padding-bottom: max(26px, env(safe-area-inset-bottom)); }
+footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); font-size: 13px; color: var(--grafite); }
 
-@media (min-width: 640px) {
-  :root { --gutter: 24px; }
-  header.top { padding-top: 28px; padding-bottom: 20px; }
-  .placar { padding: 30px 30px 28px; }
-  .lad { font-size: 15px; }
+/* entrada da abertura, uma vez */
+[data-enter] > * { animation: sobe .7s var(--mola) both; }
+[data-enter] > *:nth-child(2) { animation-delay: .12s; }
+[data-enter] > *:nth-child(3) { animation-delay: .2s; }
+@keyframes sobe { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+@media (min-width: 900px) {
+  :root { --gutter: 40px; }
+  header.top .wrap { padding-top: 30px; padding-bottom: 30px; }
+  .intro {
+    grid-template-columns: 1.05fr .95fr; grid-template-areas: "txt vis" "acao vis";
+    column-gap: 72px; align-content: center; align-items: start; min-height: calc(100vh - 200px); padding-top: 0;
+  }
+  .intro-txt { align-self: end; }
+  .intro-vis { margin-top: 0; align-self: center; }
+  .intro-acao { max-width: 440px; margin-top: 30px; }
+  .painel { padding: 28px 30px 26px; }
+  .q-grid { grid-template-columns: minmax(0, 1fr) 360px; gap: 64px; align-items: start; }
+  .q-lado { display: block; position: sticky; top: 24px; }
+  .ladrilhos { gap: 14px; margin-top: 30px; }
+  .lad { font-size: 16px; border-radius: 24px; }
+  .folha .wrap { grid-template-columns: 1fr auto; column-gap: 32px; align-items: center; }
+  .folha .wrap > * { grid-column: 1; }
+  .folha .faixa { grid-column: 2; grid-row: 1 / span 3; margin: 0; width: auto; min-width: 240px; }
+  .f-grid { grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+  .f-grid form { margin-top: 6px; }
+  .r-grid { grid-template-columns: 440px minmax(0, 1fr); gap: 56px; align-items: start; }
+  .r-grid .placar { position: sticky; top: 24px; }
+  .r-grid .secao { margin-top: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -260,59 +303,88 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
 </style>
 </head>
 <body>
+<a class="pular" href="#app">Pular para o teste</a>
+<!-- Vendômetro · quiz de captação (serviço). Marca Pixel Media: Papel, Tinta, um toque de Ouro; DM Sans + Newsreader itálico.
+     Momento: o ponteiro do velocímetro faz a varredura de "carro ligando" na abertura. -->
 
-<div class="wrap">
-  <header class="top">
-    <a href="#" aria-label="Pixel Media" id="logo" style="display:block">
+<header class="top">
+  <div class="wrap">
+    <span id="logo" style="display:block">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -72.5 537.5 73.7" role="img" aria-label="Pixel Media"><g transform="translate(-6.8 0)"><path fill="#0A0909" d="M20.80 0L6.80 0L6.80-70L33.40-70Q41.90-70 47.50-67.10Q53.10-64.20 55.85-59.25Q58.60-54.30 58.60-48L58.60-48Q58.60-42.20 55.95-37.25Q53.30-32.30 47.70-29.20Q42.10-26.10 33.40-26.10L33.40-26.10L20.80-26.10L20.80 0ZM20.80-58.60L20.80-37.40L32.50-37.40Q38.80-37.40 41.55-40.30Q44.30-43.20 44.30-48L44.30-48Q44.30-53 41.55-55.80Q38.80-58.60 32.50-58.60L32.50-58.60L20.80-58.60ZM79.70 0L65.70 0L65.70-50.40L79.70-50.40L79.70 0ZM72.70-56.90L72.70-56.90Q68.90-56.90 66.50-59.15Q64.10-61.40 64.10-64.70L64.10-64.70Q64.10-68.10 66.50-70.30Q68.90-72.50 72.70-72.50L72.70-72.50Q76.50-72.50 78.90-70.30Q81.30-68.10 81.30-64.70L81.30-64.70Q81.30-61.40 78.90-59.15Q76.50-56.90 72.70-56.90ZM100.50 0L85.40 0L103.60-25.20L85.40-50.40L100.50-50.40L112.50-33.50L124.40-50.40L139.40-50.40L121.20-25.20L139.40 0L124.40 0L112.50-17L100.50 0ZM166.50 1.20L166.50 1.20Q158.90 1.20 153.05-2.05Q147.20-5.30 143.90-11.15Q140.60-17 140.60-24.70L140.60-24.70Q140.60-32.50 143.85-38.55Q147.10-44.60 152.95-48.10Q158.80-51.60 166.60-51.60L166.60-51.60Q174.10-51.60 179.75-48.30Q185.40-45 188.55-39.40Q191.70-33.80 191.70-26.50L191.70-26.50Q191.70-25.50 191.65-24.30Q191.60-23.10 191.40-21.70L191.40-21.70L154.50-21.70Q154.70-18.70 155.90-16.40L155.90-16.40Q157.40-13.40 160.10-11.80Q162.80-10.20 166.40-10.20Q170-10.20 172.35-11.70Q174.70-13.20 175.90-15.60L175.90-15.60L190.20-15.60Q188.80-10.90 185.45-7.10Q182.10-3.30 177.30-1.05Q172.50 1.20 166.50 1.20ZM154.70-30.20L154.70-30.20L177.50-30.20Q177.20-34.80 174.15-37.55Q171.10-40.30 166.60-40.30L166.60-40.30Q163.20-40.30 160.40-38.70Q157.60-37.10 156-34L156-34Q155.10-32.30 154.70-30.20ZM213.70 0L199.70 0L199.70-72L213.70-72L213.70 0ZM258.20 0L244.20 0L244.20-70L261-70L282.10-26.90L302.90-70L319.60-70L319.60 0L305.60 0L305.60-46.30L287.50-9.80L276.40-9.80L258.20-46.30L258.20 0ZM354.30 1.20L354.30 1.20Q346.70 1.20 340.85-2.05Q335-5.30 331.70-11.15Q328.40-17 328.40-24.70L328.40-24.70Q328.40-32.50 331.65-38.55Q334.90-44.60 340.75-48.10Q346.60-51.60 354.40-51.60L354.40-51.60Q361.90-51.60 367.55-48.30Q373.20-45 376.35-39.40Q379.50-33.80 379.50-26.50L379.50-26.50Q379.50-25.50 379.45-24.30Q379.40-23.10 379.20-21.70L379.20-21.70L342.30-21.70Q342.50-18.70 343.70-16.40L343.70-16.40Q345.20-13.40 347.90-11.80Q350.60-10.20 354.20-10.20Q357.80-10.20 360.15-11.70Q362.50-13.20 363.70-15.60L363.70-15.60L378-15.60Q376.60-10.90 373.25-7.10Q369.90-3.30 365.10-1.05Q360.30 1.20 354.30 1.20ZM342.50-30.20L342.50-30.20L365.30-30.20Q365-34.80 361.95-37.55Q358.90-40.30 354.40-40.30L354.40-40.30Q351-40.30 348.20-38.70Q345.40-37.10 343.80-34L343.80-34Q342.90-32.30 342.50-30.20ZM409.90 1.20L409.90 1.20Q403 1.20 397.60-2.20Q392.20-5.60 389.05-11.60Q385.90-17.60 385.90-25.10L385.90-25.10Q385.90-32.80 389.05-38.75Q392.20-44.70 397.75-48.15Q403.30-51.60 410.20-51.60L410.20-51.60Q415.60-51.60 419.60-49.65Q423.60-47.70 426.10-44.10L426.10-44.10L426.10-72L440.10-72L440.10 0L427.70 0L426.10-6.80Q424.60-4.70 422.40-2.85Q420.20-1 417.10 0.10Q414 1.20 409.90 1.20ZM413.30-11L413.30-11Q417.20-11 420.20-12.80Q423.20-14.60 424.85-17.80Q426.50-21 426.50-25.20Q426.50-29.40 424.85-32.60Q423.20-35.80 420.20-37.60Q417.20-39.40 413.30-39.40L413.30-39.40Q409.50-39.40 406.50-37.60Q403.50-35.80 401.85-32.60Q400.20-29.40 400.20-25.30L400.20-25.30Q400.20-21.10 401.85-17.85Q403.50-14.60 406.50-12.80Q409.50-11 413.30-11ZM464.50 0L450.50 0L450.50-50.40L464.50-50.40L464.50 0ZM457.50-56.90L457.50-56.90Q453.70-56.90 451.30-59.15Q448.90-61.40 448.90-64.70L448.90-64.70Q448.90-68.10 451.30-70.30Q453.70-72.50 457.50-72.50L457.50-72.50Q461.30-72.50 463.70-70.30Q466.10-68.10 466.10-64.70L466.10-64.70Q466.10-61.40 463.70-59.15Q461.30-56.90 457.50-56.90ZM491.90 1.20L491.90 1.20Q485.70 1.20 481.55-0.85Q477.40-2.90 475.45-6.35Q473.50-9.80 473.50-14L473.50-14Q473.50-18.50 475.80-22Q478.10-25.50 482.90-27.50Q487.70-29.50 494.90-29.50L494.90-29.50L507.30-29.50Q507.30-33.10 506.35-35.45Q505.40-37.80 503.35-39Q501.30-40.20 497.90-40.20L497.90-40.20Q494.20-40.20 491.65-38.60Q489.10-37 488.50-33.80L488.50-33.80L474.90-33.80Q475.50-39.20 478.50-43.15Q481.50-47.10 486.55-49.35Q491.60-51.60 498.00-51.60L498.00-51.60Q505.10-51.60 510.35-49.20Q515.60-46.80 518.45-42.30Q521.30-37.80 521.30-31.20L521.30-31.20L521.30 0L509.50 0L507.90-7.60Q506.90-5.60 505.35-4Q503.80-2.40 501.80-1.25Q499.80-0.10 497.35 0.55Q494.90 1.20 491.90 1.20ZM495.30-9.60L495.30-9.60Q497.80-9.60 499.80-10.45Q501.80-11.30 503.20-12.90Q504.60-14.50 505.50-16.55Q506.40-18.60 506.70-21L506.70-21L506.70-21.10L496.60-21.10Q493.70-21.10 491.85-20.35Q490.00-19.60 489.10-18.25Q488.20-16.90 488.20-15.20L488.20-15.20Q488.20-13.40 489.10-12.10Q490.00-10.80 491.60-10.20Q493.20-9.60 495.30-9.60Z"/><rect x="526.3" y="-18" width="18" height="18" rx="3.24" fill="#C4962A"/></g></svg>
-    </a>
+    </span>
     <span class="mono" id="passo" aria-live="polite">Teste grátis</span>
-  </header>
-  <div class="trilha" id="trilha">
-    <button class="seta" type="button" id="voltar" aria-label="Voltar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-    </button>
-    <div class="pixels" id="pixels" aria-hidden="true"></div>
   </div>
+</header>
 
-  <main id="app">
-    <!-- abertura -->
-    <section class="screen on intro" id="s-intro" aria-labelledby="t-intro">
-      <p class="rotulo mono">Vendômetro · teste grátis · 1 minuto</p>
+<main id="app" class="wrap">
+  <!-- abertura -->
+  <section class="screen on intro" id="s-intro" aria-labelledby="t-intro" data-enter>
+    <div class="intro-txt">
+      <p class="rotulo mono">Vendômetro · teste grátis</p>
       <h1 id="t-intro" tabindex="-1">Teste seu funil de vendas em 1 <em class="emo">minuto</em>.</h1>
-      <p class="lead">O Vendômetro mede o caminho do anúncio até a venda em 7 toques. A cada toque, você vê se aquilo acelera ou trava as suas vendas.</p>
-      <div class="ganha">
-        <span class="mono">No fim, de graça</span>
-        <ul>
-          <li>Sua nota no Vendômetro, de 0 a 12</li>
-          <li>Onde o seu funil trava, etapa por etapa</li>
-          <li>O plano com o que arrumar primeiro, com cópia no seu WhatsApp</li>
+      <p class="lead">São 7 toques, do anúncio até o WhatsApp. A cada resposta, você vê se aquilo acelera ou trava as suas vendas.</p>
+    </div>
+    <div class="intro-vis">
+      <div class="painel">
+        <div class="painel-topo"><span class="mono">Vendômetro</span><span class="mono">0 a 12</span></div>
+        <div class="medidor" id="g-intro" aria-hidden="true"></div>
+        <p class="leitura" aria-label="Sua nota aparece no fim">?<small> / 12</small></p>
+        <ul class="legenda">
+          <li><i style="background:#C4962A"></i>Acelera</li>
+          <li><i style="background:#E4C98C"></i>Segura</li>
+          <li><i style="background:#8C8984"></i>Trava</li>
         </ul>
+        <p class="entrega">No fim, sua nota e o plano do que arrumar primeiro, com cópia no seu WhatsApp.</p>
       </div>
+    </div>
+    <div class="intro-acao">
       <button class="faixa" type="button" id="comecar">Medir meu funil grátis</button>
-      <p class="nota-pe">Sem cadastro para começar. Feito pela Pixel Media, agência de tráfego que nasceu em Macapá e atende o Brasil todo.</p>
-    </section>
+      <ul class="fatos mono">
+        <li>7 toques</li><li>1 minuto</li><li>Sem cadastro para começar</li>
+      </ul>
+    </div>
+  </section>
 
-    <!-- pergunta (reaproveitada) -->
-    <section class="screen" id="s-q" aria-labelledby="t-q">
-      <p class="rotulo mono q-num" id="q-rotulo"></p>
-      <h2 id="t-q" tabindex="-1"></h2>
-      <div class="ladrilhos" id="ladrilhos" role="group" aria-labelledby="t-q"></div>
-    </section>
-
-    <!-- dados -->
-    <section class="screen" id="s-form" aria-labelledby="t-form">
-      <p class="rotulo mono">Respostas completas</p>
-      <h2 id="t-form" tabindex="-1">Seu Vendômetro está <em class="emo">pronto</em>.</h2>
-      <p class="lead">Diga quem é você para liberar a sua nota e o plano. Eu olho o Instagram do seu negócio antes de te chamar.</p>
-      <div class="previa" aria-hidden="true">
-        <div class="borrado">
-          <div class="placar" style="padding:18px 20px 8px">
-            <div class="medidor" id="p-medidor" style="max-width:240px;margin-top:0"></div>
-            <div class="num centro" id="p-num" style="font-size:44px;margin:0 0 6px"></div>
-          </div>
+  <!-- pergunta (reaproveitada) -->
+  <section class="screen" id="s-q" aria-labelledby="t-q">
+    <div class="q-grid">
+      <div class="q-main">
+        <div class="trilha">
+          <button class="seta" type="button" id="voltar" aria-label="Voltar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <div class="pixels" id="pixels" aria-hidden="true"></div>
         </div>
-        <div class="cadeado"><span><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 7V5a4 4 0 1 1 8 0v2h.5A1.5 1.5 0 0 1 14 8.5v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5v-5A1.5 1.5 0 0 1 3.5 7H4zm2 0h4V5a2 2 0 1 0-4 0v2z"/></svg>Liberado ao enviar</span></div>
+        <p class="rotulo mono q-num" id="q-rotulo"></p>
+        <h2 id="t-q" tabindex="-1"></h2>
+        <div class="ladrilhos" id="ladrilhos" role="group" aria-labelledby="t-q"></div>
+      </div>
+      <aside class="q-lado" aria-hidden="true">
+        <div class="painel">
+          <div class="painel-topo"><span class="mono">Seu Vendômetro</span><span class="mono" id="vivo-conta">0 de 6</span></div>
+          <div class="medidor" id="g-vivo"></div>
+          <p class="entrega">O ponteiro anda a cada resposta. A nota exata sai no fim.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- dados -->
+  <section class="screen" id="s-form" aria-labelledby="t-form">
+    <div class="f-grid">
+      <div>
+        <p class="rotulo mono">Respostas completas</p>
+        <h2 id="t-form" tabindex="-1">Seu Vendômetro está <em class="emo">pronto</em>.</h2>
+        <p class="lead">Diga quem é você para liberar a sua nota e o plano. Eu olho o Instagram do seu negócio antes de te chamar.</p>
+        <div class="previa" aria-hidden="true">
+          <div class="borrado">
+            <div class="painel">
+              <div class="medidor" id="p-medidor" style="max-width:260px;margin-top:0"></div>
+              <p class="leitura" id="p-num"></p>
+            </div>
+          </div>
+          <div class="cadeado"><span><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 7V5a4 4 0 1 1 8 0v2h.5A1.5 1.5 0 0 1 14 8.5v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5v-5A1.5 1.5 0 0 1 3.5 7H4zm2 0h4V5a2 2 0 1 0-4 0v2z"/></svg>Liberado ao enviar</span></div>
+        </div>
       </div>
       <form id="form" novalidate autocomplete="on">
         <label class="campo">Seu nome
@@ -323,37 +395,39 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
           <span class="insta"><span aria-hidden="true">@</span><input class="in" id="f-insta" name="instagram" autocomplete="off" autocapitalize="none" spellcheck="false" required maxlength="80" placeholder="seunegocio"></span>
           <span class="erro" id="e-insta"></span>
         </label>
-        <label class="campo">WhatsApp <small>com DDD</small>
+        <label class="campo">WhatsApp com DDD
           <input class="in" id="f-zap" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" required maxlength="16" placeholder="(11) 99999-9999">
           <span class="erro" id="e-zap"></span>
         </label>
         <p class="lgpd">Ao enviar, você aceita receber o contato da Pixel Media pelo WhatsApp sobre o resultado. Seus dados não são vendidos nem repassados.</p>
         <button class="faixa" type="submit" id="enviar">Liberar meu plano</button>
       </form>
-    </section>
+    </div>
+  </section>
 
-    <!-- resultado -->
-    <section class="screen" id="s-res" aria-labelledby="t-res">
-      <div class="placar">
-        <span class="mono" id="r-rotulo">Resultado</span>
+  <!-- resultado -->
+  <section class="screen" id="s-res" aria-labelledby="t-res">
+    <div class="r-grid">
+      <div class="painel placar">
+        <div class="painel-topo"><span class="mono" id="r-rotulo">Resultado</span></div>
         <div class="medidor" id="r-medidor" aria-hidden="true"></div>
-        <div class="num centro" id="r-num"></div>
+        <p class="leitura" id="r-num"></p>
         <h2 id="t-res" tabindex="-1"></h2>
-        <p id="r-texto"></p>
+        <p class="r-texto" id="r-texto"></p>
       </div>
       <div class="secao">
-        <span class="mono">— Seu plano, na ordem em que eu faria</span>
+        <p class="rotulo mono">Seu plano, na ordem em que eu faria</p>
         <div class="plano" id="r-plano"></div>
+        <div class="final">
+          <a class="faixa" id="r-zap" href="#" target="_blank" rel="noopener">Receber meu plano no WhatsApp</a>
+          <p class="sub" id="r-sub"></p>
+        </div>
       </div>
-      <div class="final">
-        <a class="faixa" id="r-zap" href="#" target="_blank" rel="noopener">Receber meu plano no WhatsApp</a>
-        <p class="sub" id="r-sub"></p>
-      </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <footer><p>Pixel Media · gestão de tráfego pago · nasceu em Macapá (AP), atende o Brasil todo</p></footer>
-</div>
+<footer><div class="wrap"><p>Pixel Media · gestão de tráfego pago · nasceu em Macapá (AP), atende o Brasil todo</p></div></footer>
 
 <!-- folha de resposta -->
 <div class="folha" id="folha" aria-live="polite">
@@ -500,9 +574,11 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
       texto: "A base está certa. O próximo passo é testar versões e colocar mais verba no que traz venda, sem perder a qualidade do lead." }
   ];
 
+
   /* ---------- estado ---------- */
   var st = { i: 0, resp: {}, iniciou: false, enviado: false };
   var $ = function (s) { return document.querySelector(s); };
+  var QUIETO = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- origem (UTM) ---------- */
   var qs = new URLSearchParams(location.search);
@@ -536,11 +612,45 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
   }
   function uid() { return "q" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
+  /* ---------- velocímetro ---------- */
+  // 12 segmentos em meia-lua e um ponteiro; monta uma vez e depois só move
+  function montaMedidor(el, escala) {
+    var cx = 120, cy = 118, r = 94, s = "", passo = Math.PI / MAX;
+    for (var k = 0; k < MAX; k++) {
+      var a0 = Math.PI - k * passo - 0.025, a1 = Math.PI - (k + 1) * passo + 0.025;
+      s += '<path class="seg" d="M' + (cx + r * Math.cos(a0)).toFixed(2) + " " + (cy - r * Math.sin(a0)).toFixed(2) +
+        "A" + r + " " + r + " 0 0 1 " + (cx + r * Math.cos(a1)).toFixed(2) + " " + (cy - r * Math.sin(a1)).toFixed(2) +
+        '" fill="none" stroke-width="18"/>';
+    }
+    s += '<g class="ponteiro"><path d="M120 111L40 118L120 125Z" fill="#F8F7F6"/><circle cx="120" cy="118" r="10" fill="#C4962A"/></g>';
+    el.innerHTML = '<svg viewBox="0 0 240 128" aria-hidden="true" focusable="false">' + s + "</svg>" +
+      (escala ? '<div class="escala"><span>Travado</span><span>Pela metade</span><span>Acelerado</span></div>' : "");
+    el._segs = el.querySelectorAll(".seg"); el._pt = el.querySelector(".ponteiro");
+  }
+  function medidor(el, n, cascata, escala) {
+    if (!el._segs) montaMedidor(el, escala !== false);
+    el._segs.forEach(function (g, k) {
+      g.style.transitionDelay = cascata && !QUIETO ? (250 + k * 70) + "ms" : "0ms";
+      g.classList.toggle("on", k < n);
+    });
+    el._pt.style.transform = "rotate(" + (n / MAX * 180) + "deg)";
+  }
+
+  // abertura: o ponteiro faz a varredura de carro ligando, uma vez
+  var gIntro = $("#g-intro");
+  medidor(gIntro, 0, false);
+  if (!QUIETO) {
+    setTimeout(function () { medidor(gIntro, MAX, true); }, 450);
+    setTimeout(function () { medidor(gIntro, 0, false); }, 2100);
+  }
+  var cta = $("#comecar");
+  cta.addEventListener("mouseenter", function () { medidor(gIntro, 3, false); });
+  cta.addEventListener("mouseleave", function () { medidor(gIntro, 0, false); });
+
   /* ---------- navegação ---------- */
   function show(id) {
     document.querySelectorAll(".screen").forEach(function (s) { s.classList.remove("on"); });
     var el = $(id); el.classList.add("on");
-    $("#trilha").classList.toggle("on", id === "#s-q");
     window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     var h = el.querySelector("[tabindex='-1']"); if (h) h.focus({ preventScroll: true });
   }
@@ -553,9 +663,15 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     TODAS.forEach(function (q, ix) {
       var el = pix.children[ix], j = st.resp[q.id];
       el.className = j == null ? "" : (ix === 0 ? "nicho" : "p" + q.ops[j].p);
-      if (ix === st.i && $("#s-q").classList.contains("on")) el.classList.add("agora");
+      if (ix === st.i) el.classList.add("agora");
       if (ix === popEm) { void el.offsetWidth; el.classList.add("pop"); }
     });
+  }
+  // o Vendômetro ao vivo (computador): soma do que já foi respondido
+  function vivo() {
+    var feitas = PERGUNTAS.filter(function (q) { return st.resp[q.id] != null; }).length;
+    $("#vivo-conta").textContent = feitas + " de " + PERGUNTAS.length;
+    medidor($("#g-vivo"), nota(), false, false);
   }
 
   function folha(abrir) {
@@ -582,6 +698,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     folha(false);
     $("#proxima").textContent = st.i === TOTAL - 1 ? "Ver meu resultado" : "Continuar";
     pintaPixels();
+    vivo();
     var prev = st.resp[q.id];
     if (prev != null) escolher(prev, true);
   }
@@ -598,6 +715,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     $("#c-titulo").textContent = op.c[0];
     $("#c-texto").textContent = op.c[1];
     pintaPixels(silencioso ? null : st.i);
+    vivo();
     folha(true);
   }
 
@@ -605,26 +723,8 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     return PERGUNTAS.reduce(function (s, q) { var j = st.resp[q.id]; return s + (j == null ? 0 : q.ops[j].p); }, 0);
   }
   function faixa(n) { return FAIXAS.filter(function (f) { return n >= f.min && n <= f.max; })[0]; }
-  // velocímetro: 12 segmentos em meia-lua e um ponteiro que sobe até a nota
-  function medidor(el, n, anima) {
-    var cx = 120, cy = 118, r = 94, s = "", passo = Math.PI / MAX;
-    for (var k = 0; k < MAX; k++) {
-      var a0 = Math.PI - k * passo - 0.025, a1 = Math.PI - (k + 1) * passo + 0.025;
-      s += '<path class="seg" d="M' + (cx + r * Math.cos(a0)).toFixed(2) + " " + (cy - r * Math.sin(a0)).toFixed(2) +
-        "A" + r + " " + r + " 0 0 1 " + (cx + r * Math.cos(a1)).toFixed(2) + " " + (cy - r * Math.sin(a1)).toFixed(2) +
-        '" fill="none" stroke-width="18" style="transition-delay:' + (anima ? 250 + k * 70 : 0) + 'ms"/>';
-    }
-    s += '<g class="ponteiro"><path d="M120 111L40 118L120 125Z" fill="#F8F7F6"/><circle cx="120" cy="118" r="10" fill="#C4962A"/></g>';
-    el.innerHTML = '<svg viewBox="0 0 240 128">' + s + "</svg>" +
-      '<div class="escala"><span>Travado</span><span>Pela metade</span><span>Acelerado</span></div>';
-    var aplica = function () {
-      el.querySelectorAll(".seg").forEach(function (g, k) { g.classList.toggle("on", k < n); });
-      el.querySelector(".ponteiro").style.transform = "rotate(" + (n / MAX * 180) + "deg)";
-    };
-    if (anima) setTimeout(aplica, 120); else { el.querySelector(".ponteiro").style.transition = "none"; aplica(); }
-  }
 
-  $("#comecar").addEventListener("click", function () { st.i = 0; show("#s-q"); renderQ(); });
+  cta.addEventListener("click", function () { st.i = 0; show("#s-q"); renderQ(); });
   $("#proxima").addEventListener("click", function () {
     folha(false);
     if (st.i < TOTAL - 1) { st.i++; renderQ(); show("#s-q"); pintaPixels(); }
@@ -633,7 +733,7 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
       px("trackCustom", "QuizRespondido", { quiz: "trafego", nota: nota(), nicho: NICHO.ops[st.resp.nicho].t });
       // a prévia borrada usa a nota real da pessoa
       $("#p-num").innerHTML = nota() + "<small> / " + MAX + "</small>";
-      medidor($("#p-medidor"), nota(), false);
+      medidor($("#p-medidor"), nota(), false, false);
       show("#s-form");
     }
   });
@@ -642,7 +742,6 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     if (st.i === 0) { $("#passo").textContent = "Teste grátis"; show("#s-intro"); }
     else { st.i--; renderQ(); show("#s-q"); pintaPixels(); }
   });
-  $("#logo").addEventListener("click", function (e) { e.preventDefault(); });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && $("#folha").classList.contains("on") && document.activeElement && document.activeElement.classList.contains("lad")) {
       e.preventDefault(); $("#proxima").click();
@@ -767,7 +866,9 @@ footer p { margin: 0; font-size: 13px; color: var(--grafite); }
     }, { once: true });
 
     show("#s-res");
-    medidor($("#r-medidor"), d.nota, true);
+    var rm = $("#r-medidor");
+    medidor(rm, 0, false);
+    setTimeout(function () { medidor(rm, d.nota, true); }, 120);
   }
 })();
 </script>
