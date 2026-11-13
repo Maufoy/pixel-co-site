@@ -13,7 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23C4962A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Newsreader:ital,opsz,wght@1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Newsreader:ital,opsz,wght@1,6..72,500&display=swap" rel="stylesheet">
 
 <script>
 /* ============================================================
@@ -81,7 +81,8 @@ header.top {
   padding-top: max(18px, env(safe-area-inset-top)); padding-bottom: 18px; gap: 12px;
 }
 header.top svg { height: 21px; width: auto; display: block; }
-.mono { font-family: "DM Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: 0; color: var(--grafite); font-variant-numeric: tabular-nums; }
+/* "DM Sans Rótulo" (guia da marca, 12/11): DM Sans Medium, tamanho óptico 9, algarismos tabulares, +2% */
+.mono { font-family: "DM Sans", system-ui, sans-serif; font-weight: 500; font-variation-settings: "opsz" 9; font-optical-sizing: none; font-size: 13.5px; letter-spacing: 0.02em; color: var(--grafite); font-variant-numeric: tabular-nums; }
 
 /* barra de progresso */
 .progress { height: 3px; background: var(--linha); border-radius: 2px; overflow: hidden; margin-bottom: 28px; }
@@ -133,7 +134,7 @@ em.emo {
 }
 .op:hover { border-color: #CFCDC9; }
 .op:active { transform: scale(.99); }
-.op .k { font-family: "DM Mono", monospace; font-size: 13px; color: var(--grafite); }
+.op .k { font-family: "DM Sans", system-ui, sans-serif; font-weight: 500; font-variation-settings: "opsz" 9; font-optical-sizing: none; font-size: 13.5px; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; color: var(--grafite); }
 .op[aria-pressed="true"] { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); }
 .op[aria-pressed="true"] .k { color: transparent; position: relative; }
 .op[aria-pressed="true"] .k::after {
