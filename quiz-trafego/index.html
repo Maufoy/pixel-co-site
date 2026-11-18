@@ -1233,15 +1233,25 @@ footer p { margin: 0; padding-top: 22px; border-top: 1px solid var(--linha); fon
       navegador: navigator.userAgent.slice(0, 180)
     };
 
-    // 1) planilha
+    function metaCookie(nome) {
+      var cookie = document.cookie.split(/;\s*/).find(function (item) {
+        return item.indexOf(nome + "=") === 0;
+      });
+      return cookie ? cookie.slice(nome.length + 1) : "";
+    }
+    var fbc = metaCookie("_fbc");
+    if (ORIGEM.fbclid && (!fbc || fbc.split(".").slice(3).join(".") !== ORIGEM.fbclid)) {
+      fbc = "fb.1." + Date.now() + "." + ORIGEM.fbclid;
+    }
+    dados.meta = { fbp: metaCookie("_fbp"), fbc: fbc };
+
+    // O Apps Script registra Lead na Meta depois de salvar a linha.
     if (CFG.sheetUrl) {
       try {
         fetch(CFG.sheetUrl, { method: "POST", mode: "no-cors", keepalive: true,
           headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dados) });
       } catch (err) {}
     }
-    // 2) evento de lead
-    px("track", "Lead", { content_name: CFG.nome, content_category: nicho, nota: n, faixa: f.nome }, { eventID: eid });
     gconv(CFG.googleAds.leadLabel, { transaction_id: eid });
 
     setTimeout(function () { resultado(dados, f); }, 450);
